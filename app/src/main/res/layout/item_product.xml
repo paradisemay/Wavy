@@ -13,12 +13,13 @@
         android:layout_height="wrap_content"
         android:background="#FEF7FF">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivProduct"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:src="@drawable/mock_product_image"
+            app:shapeAppearanceOverlay="@style/RoundedImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
