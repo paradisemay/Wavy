@@ -21,6 +21,7 @@
         android:layout_marginTop="24dp"
         android:adjustViewBounds="true"
         android:src="@drawable/mock_product_image"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivBack"
@@ -37,6 +38,7 @@
         android:text="1 104 ₽"
         android:textColor="#1D1B20"
         android:textSize="24sp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sivProduct" />
 
@@ -51,6 +53,7 @@
         android:text="435789542"
         android:textColor="#79747E"
         android:textSize="24sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sivProduct" />
 
@@ -65,21 +68,23 @@
         android:text="Блузка боди на запах без рукавов"
         android:textColor="#1D1B20"
         android:textSize="22sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvProductPrice"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/tvProductPrice" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_rounded_card"
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvProductName"
+        android:background="@drawable/bg_rounded_card"
+        android:paddingHorizontal="36dp"
         android:paddingVertical="10dp"
-        android:paddingHorizontal="36dp">
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvProductName">
 
         <TextView
             android:id="@+id/tvProductNae"
@@ -90,13 +95,31 @@
             android:text="запах без рукавов"
             android:textColor="#1D1B20"
             android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="parent" />
 
         <!-- TODO: закончить верстку-->
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/tvUnreachableSection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="Этот раздел пока не доступен."
+        android:textColor="@color/main_text_color"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBack" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
