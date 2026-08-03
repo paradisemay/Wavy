@@ -105,5 +105,7 @@ class ProductListFragment : Fragment() {
         }
         binding.rvProducts.adapter = myAdapter
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        binding.rvProducts.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
     }
 }

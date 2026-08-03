@@ -31,6 +31,8 @@ class ProductDetailsFragment : Fragment() {
 
         val productId = arguments?.getString("PRODUCT_ID")
 
+//        binding.tvUnreachableSection.text = getString(R.string.unreachable_section) + "\n$productId"
+
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
