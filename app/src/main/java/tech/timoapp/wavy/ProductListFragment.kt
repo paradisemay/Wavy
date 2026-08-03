@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import tech.timoapp.wavy.adapter.ProductAdapter
 import tech.timoapp.wavy.databinding.FragmentProductListBinding
@@ -94,7 +95,14 @@ class ProductListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val myData = getMockProducts()
-        val myAdapter = ProductAdapter(myData)
+        val myAdapter = ProductAdapter(myData) {
+            val bundle = Bundle()
+            bundle.putString("PRODUCT_ID", it)
+            findNavController().navigate(
+                R.id.action_productListFragment_to_productDetailsFragment,
+                bundle
+            )
+        }
         binding.rvProducts.adapter = myAdapter
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
     }
