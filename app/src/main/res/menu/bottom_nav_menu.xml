@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/reviewsFragment"
-        android:icon="@drawable/ic_star"
+        android:icon="@drawable/ic_review"
         android:title="Отзывы" />
 
 </menu>
