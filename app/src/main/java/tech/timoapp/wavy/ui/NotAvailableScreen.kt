@@ -44,7 +44,7 @@ fun NotAvailableScreen(onBackClick: (() -> Unit)? = null) {
             color = colorResource(R.color.main_text_color),
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
-            maxLines = 2,
+            maxLines = 4,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .align(Alignment.Center)
