@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/productDetailsFragment"
+        android:id="@+id/productListFragment"
         android:icon="@drawable/ic_box"
         android:title="Товары" />
 
