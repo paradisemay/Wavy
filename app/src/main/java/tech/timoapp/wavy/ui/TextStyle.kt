@@ -65,6 +65,26 @@ fun MainText(text: String, modifier: Modifier? = null) {
 }
 
 @Composable
+fun MainStatisticText(text: String, modifier: Modifier? = null) {
+    BaseText(
+        text,
+        colorResource(R.color.main_text_color),
+        16.sp,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun LargeStatisticText(text: String, modifier: Modifier? = null) {
+    BaseText(
+        text,
+        colorResource(R.color.main_text_color),
+        26.sp,
+        modifier = modifier
+    )
+}
+
+@Composable
 fun TitleSubText(text: String, modifier: Modifier? = null) {
     BaseText(
         text,

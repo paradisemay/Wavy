@@ -1,12 +1,20 @@
 package tech.timoapp.wavy.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.timoapp.wavy.R
@@ -33,6 +41,56 @@ fun TitleAndPriceContent(product: ProductDetailsUiModel) {
     }
 }
 
+@Composable
+fun StatisticContent(product: ProductDetailsUiModel) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .padding(top=16.dp)
+            .fillMaxWidth()
+            .background(
+                color = colorResource(R.color.light_purple),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .padding(vertical = 10.dp, horizontal = 36.dp)
+    ) {
+        FactorIdBlock(
+            largeText = product.rating,
+            smallText = stringResource(R.string.rating),
+            iconRes = R.drawable.ic_star
+        )
+        FactorIdBlock(
+            largeText = product.ordersCount,
+            smallText = stringResource(R.string.orders),
+            iconRes = R.drawable.ic_box
+        )
+        FactorIdBlock(
+            largeText = product.stockCount,
+            smallText = stringResource(R.string.in_stock),
+            iconRes = R.drawable.ic_cart_warehouse
+        )
+
+    }
+}
+
+@Composable
+fun FactorIdBlock(largeText: String, smallText: String, iconRes: Int) {
+    Column {
+        Row {
+            LargeStatisticText(
+                text = largeText,
+                modifier = Modifier.padding(end = 4.dp)
+            )
+            Icon(
+                painter = painterResource(iconRes),
+                contentDescription = null,
+                modifier = Modifier.align(Alignment.CenterVertically).size(26.21.dp)
+            )
+        }
+        MainStatisticText(smallText)
+    }
+}
+
 val mockProduct = ProductDetailsUiModel(
     imageRes = R.drawable.mock_product_image,
     category = "Одежда",
@@ -50,5 +108,23 @@ val mockProduct = ProductDetailsUiModel(
 fun TitleAndPriceContentPreview() {
     TitleAndPriceContent(
         product = mockProduct
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun StatisticContentPreview() {
+    StatisticContent(
+        product = mockProduct
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FactorIdBlockPreview() {
+    FactorIdBlock(
+        largeText = mockProduct.rating,
+        smallText = stringResource(R.string.rating),
+        iconRes = R.drawable.ic_star
     )
 }
