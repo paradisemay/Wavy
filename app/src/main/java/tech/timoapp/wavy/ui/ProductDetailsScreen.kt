@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +23,10 @@ fun TitleAndPriceContent(product: ProductDetailsUiModel) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            TitleText(product.price)
+            TitleText(
+                text = product.price,
+                modifier = Modifier.padding(end = 10.dp)
+            )
             TitleSubText(product.article)
         }
         LargeText(product.title)
