@@ -1,7 +1,9 @@
 package tech.timoapp.wavy.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +14,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,7 +50,7 @@ fun StatisticContent(product: ProductDetailsUiModel) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .padding(top=16.dp)
+            .padding(top = 16.dp)
             .fillMaxWidth()
             .background(
                 color = colorResource(R.color.light_purple),
@@ -84,10 +88,60 @@ fun FactorIdBlock(largeText: String, smallText: String, iconRes: Int) {
             Icon(
                 painter = painterResource(iconRes),
                 contentDescription = null,
-                modifier = Modifier.align(Alignment.CenterVertically).size(26.21.dp)
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .size(26.21.dp)
             )
         }
         MainStatisticText(smallText)
+    }
+}
+
+@Composable
+fun ImageContent(product: ProductDetailsUiModel) {
+    Box(
+        contentAlignment = Alignment.BottomStart,
+    ) {
+        RoundedImage(product.imageRes)
+        ContentBadge(product)
+    }
+}
+
+@Composable
+fun RoundedImage(imageRes: Int) {
+    Image(
+        painter = painterResource(imageRes),
+        contentDescription = null,
+        contentScale = ContentScale.FillWidth,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+    )
+}
+
+@Composable
+fun ContentBadge(product: ProductDetailsUiModel) {
+    Badge(
+        modifier = Modifier.padding(10.dp)
+    ) {
+        MainText(product.category)
+    }
+}
+
+@Composable
+fun Badge(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Box(
+        modifier = modifier
+            .background(
+                color = colorResource(R.color.white),
+                shape = RoundedCornerShape(48.dp)
+            )
+            .padding(
+                horizontal = 9.dp,
+                vertical = 2.dp
+            )
+    ) {
+        content()
     }
 }
 
@@ -126,5 +180,29 @@ fun FactorIdBlockPreview() {
         largeText = mockProduct.rating,
         smallText = stringResource(R.string.rating),
         iconRes = R.drawable.ic_star
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ImageContentPreview() {
+    ImageContent(
+        product = mockProduct
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RoundedImagePreview() {
+    RoundedImage(
+        imageRes = R.drawable.mock_product_image
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ContentBadgePreview() {
+    ContentBadge(
+        product = mockProduct
     )
 }
