@@ -32,7 +32,7 @@ fun BaseText(
 }
 
 @Composable
-fun TitleText(text: String, modifier: Modifier? = null) {
+fun TitleText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     BaseText(
         text,
         colorResource(R.color.main_text_color),
@@ -42,7 +42,7 @@ fun TitleText(text: String, modifier: Modifier? = null) {
 }
 
 @Composable
-fun LargeText(text: String, modifier: Modifier? = null) {
+fun LargeText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     BaseText(
         text,
         colorResource(R.color.main_text_color),
@@ -53,43 +53,46 @@ fun LargeText(text: String, modifier: Modifier? = null) {
 }
 
 @Composable
-fun MainText(text: String, modifier: Modifier? = null) {
+fun MainText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     BaseText(
         text,
         colorResource(R.color.main_text_color),
         16.sp,
         FontWeight(400),
-        maxLines = null,
+        maxLines = maxLines,
         modifier = modifier
     )
 }
 
 @Composable
-fun MainStatisticText(text: String, modifier: Modifier? = null) {
+fun MainStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     BaseText(
         text,
         colorResource(R.color.main_text_color),
         16.sp,
+        maxLines = maxLines,
         modifier = modifier
     )
 }
 
 @Composable
-fun LargeStatisticText(text: String, modifier: Modifier? = null) {
+fun LargeStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     BaseText(
         text,
         colorResource(R.color.main_text_color),
         26.sp,
+        maxLines = maxLines,
         modifier = modifier
     )
 }
 
 @Composable
-fun TitleSubText(text: String, modifier: Modifier? = null) {
+fun TitleSubText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     BaseText(
         text,
         colorResource(R.color.sub_text_color),
         24.sp,
+        maxLines = maxLines,
         modifier = modifier
     )
 }

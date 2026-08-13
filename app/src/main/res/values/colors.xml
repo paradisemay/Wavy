@@ -10,4 +10,5 @@
     <color name="main_text_color">#1D1B20</color>
     <color name="sub_text_color">#79747E</color>
     <color name="light_purple">#EADDFF</color>
+    <color name="background_color">#FEF7FF</color>
 </resources>
