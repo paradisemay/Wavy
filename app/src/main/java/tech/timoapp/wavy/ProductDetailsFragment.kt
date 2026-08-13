@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import tech.timoapp.wavy.ui.NotAvailableScreen
+import tech.timoapp.wavy.ui.DetailsPageScreen
+import tech.timoapp.wavy.ui.mockProduct
 
 class ProductDetailsFragment : Fragment() {
 
@@ -16,7 +17,8 @@ class ProductDetailsFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                NotAvailableScreen(
+                DetailsPageScreen(
+                    product = mockProduct,
                     onBackClick = { findNavController().popBackStack() })
             }
         }

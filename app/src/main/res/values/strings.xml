@@ -3,7 +3,7 @@
     <string name="hello_world">Hello World!</string>
     <string name="unreachable_section">Этот раздел пока не доступен.</string>
     <string name="rating">рейтинг</string>
-    <string name="orders">заказов"</string>
+    <string name="orders">заказов</string>
     <string name="in_stock">на складе</string>
     <string name="clothes">Одежда</string>
 </resources>

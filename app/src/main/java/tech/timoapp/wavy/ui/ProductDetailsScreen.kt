@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -34,10 +38,12 @@ import tech.timoapp.wavy.model.ProductDetailsUiModel
 @Composable
 fun TitleAndPriceContent(product: ProductDetailsUiModel) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
         ) {
             TitleText(
                 text = product.price, modifier = Modifier.padding(end = 10.dp)
@@ -53,7 +59,6 @@ fun StatisticContent(product: ProductDetailsUiModel) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .padding(top = 16.dp)
             .fillMaxWidth()
             .background(
                 color = colorResource(R.color.light_purple), shape = RoundedCornerShape(10.dp)
@@ -102,7 +107,7 @@ fun ContentBadge(product: ProductDetailsUiModel) {
 
 @Composable
 fun ProductDescription(product: ProductDetailsUiModel) {
-    DescriptionContent {isExpanded ->
+    DescriptionContent { isExpanded ->
         MainText(
             text = product.description,
             maxLines = if (isExpanded) Int.MAX_VALUE else 7
@@ -115,7 +120,39 @@ fun DetailsPageScreen(
     product: ProductDetailsUiModel,
     onBackClick: () -> Unit
 ) {
+    val scrollState = rememberScrollState()
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_color))
+            .animateContentSize()
+            .verticalScroll(scrollState)
+    ) {
+        IconButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .padding(start = 4.dp, top = 8.dp, bottom = 8.dp)
+                .size(48.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back),
+                contentDescription = null,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+        ImageContent(product)
+        Column(
+            modifier = Modifier
+                .padding(vertical = 10.dp, horizontal = 12.dp)
+        ) {
+            TitleAndPriceContent(product)
+            Spacer(modifier = Modifier.size(16.dp))
+            StatisticContent(product)
+            Spacer(modifier = Modifier.size(24.dp))
+            ProductDescription(product)
+        }
+    }
 }
 
 val mockProduct = ProductDetailsUiModel(
@@ -172,7 +209,7 @@ fun ProductDescriptionPreview() {
     )
 }
 
-@Preview()
+@Preview
 @Composable
 fun DetailsPageScreenPreview() {
     DetailsPageScreen(
