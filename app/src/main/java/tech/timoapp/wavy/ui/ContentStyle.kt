@@ -30,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.timoapp.wavy.R
 
+internal const val DESCRIPTION_COLLAPSED_MAX_LINES = 7
+
 @Composable
 fun FactorIdBlock(largeText: String, smallText: String, iconRes: Int) {
     Column {
@@ -103,8 +105,7 @@ fun DescriptionContent(
     var isExpanded by remember { mutableStateOf(false) }
 
     val rotationAngle by animateFloatAsState(
-        targetValue = if (isExpanded) 180f else 0f,
-        label = "chevronRotation"
+        targetValue = if (isExpanded) 180f else 0f, label = "chevronRotation"
     )
 
     Box(
@@ -130,10 +131,10 @@ fun DescriptionContent(
 @Composable
 @Preview(showBackground = true)
 fun DescriptionContentPreview() {
-    DescriptionContent {isExpanded ->
+    DescriptionContent { isExpanded ->
         MainText(
             text = "Блузка-боди скимс без рукавов от Moremio – это идеальное сочетание стиля и комфорта, которое подчеркнет вашу женственность и красоту. Соблазнительный вырез на груди и обтягивающий крой создают сексуальный и элегантный образ, идеально подходящий как для вечерних летних выходов, так и для повседневной носки. Мягкая вискоза в составе ткани обеспечит комфорт в течение всего дня, а эластан придаст блузке-боди идеальную посадку по фигуре. Модель skims с запахом и стрингами добавит пикантности вашему образу, а складки на талии – изысканности. Благодаря эластичному материалу блузка-боди прекрасно подойдет для высоких девушек и женщин с пышными формами. Это универсальная модель, которая легко трансформируется из офисного варианта в вечерний наряд, просто добавив стильные аксессуары. Это та самая летняя блузка-боди из pinterest (пинтерест)",
-            maxLines = if (isExpanded) Int.MAX_VALUE else 7
+            maxLines = if (isExpanded) Int.MAX_VALUE else DESCRIPTION_COLLAPSED_MAX_LINES
         )
     }
 }

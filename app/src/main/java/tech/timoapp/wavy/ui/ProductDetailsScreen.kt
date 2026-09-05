@@ -1,9 +1,7 @@
 package tech.timoapp.wavy.ui
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,31 +17,23 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.timoapp.wavy.R
-import tech.timoapp.wavy.model.ProductDetailsUiModel
-
+import tech.timoapp.wavy.model.ProductDetailsModel
 
 @Composable
-fun TitleAndPriceContent(product: ProductDetailsUiModel) {
+fun TitleAndPriceContent(product: ProductDetailsModel) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
         ) {
             TitleText(
                 text = product.price, modifier = Modifier.padding(end = 10.dp)
@@ -55,7 +45,7 @@ fun TitleAndPriceContent(product: ProductDetailsUiModel) {
 }
 
 @Composable
-fun StatisticContent(product: ProductDetailsUiModel) {
+fun StatisticContent(product: ProductDetailsModel) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -84,9 +74,8 @@ fun StatisticContent(product: ProductDetailsUiModel) {
     }
 }
 
-
 @Composable
-fun ImageContent(product: ProductDetailsUiModel) {
+fun ImageContent(product: ProductDetailsModel) {
     Box(
         contentAlignment = Alignment.BottomStart,
     ) {
@@ -95,9 +84,8 @@ fun ImageContent(product: ProductDetailsUiModel) {
     }
 }
 
-
 @Composable
-fun ContentBadge(product: ProductDetailsUiModel) {
+fun ContentBadge(product: ProductDetailsModel) {
     Badge(
         modifier = Modifier.padding(10.dp)
     ) {
@@ -106,19 +94,18 @@ fun ContentBadge(product: ProductDetailsUiModel) {
 }
 
 @Composable
-fun ProductDescription(product: ProductDetailsUiModel) {
+fun ProductDescription(product: ProductDetailsModel) {
     DescriptionContent { isExpanded ->
         MainText(
             text = product.description,
-            maxLines = if (isExpanded) Int.MAX_VALUE else 7
+            maxLines = if (isExpanded) Int.MAX_VALUE else DESCRIPTION_COLLAPSED_MAX_LINES
         )
     }
 }
 
 @Composable
 fun DetailsPageScreen(
-    product: ProductDetailsUiModel,
-    onBackClick: () -> Unit
+    product: ProductDetailsModel, onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -143,8 +130,7 @@ fun DetailsPageScreen(
         }
         ImageContent(product)
         Column(
-            modifier = Modifier
-                .padding(vertical = 10.dp, horizontal = 12.dp)
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 12.dp)
         ) {
             TitleAndPriceContent(product)
             Spacer(modifier = Modifier.size(16.dp))
@@ -155,7 +141,7 @@ fun DetailsPageScreen(
     }
 }
 
-val mockProduct = ProductDetailsUiModel(
+val mockProduct = ProductDetailsModel(
     imageRes = R.drawable.mock_product_image,
     category = "Одежда",
     price = "1 104 ₽",
@@ -183,7 +169,6 @@ fun StatisticContentPreview() {
     )
 }
 
-
 @Preview(showBackground = true, backgroundColor = 0xFFFEF7FF)
 @Composable
 fun ImageContentPreview() {
@@ -191,7 +176,6 @@ fun ImageContentPreview() {
         product = mockProduct
     )
 }
-
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
@@ -213,7 +197,5 @@ fun ProductDescriptionPreview() {
 @Composable
 fun DetailsPageScreenPreview() {
     DetailsPageScreen(
-        product = mockProduct,
-        onBackClick = {}
-    )
+        product = mockProduct, onBackClick = {})
 }
