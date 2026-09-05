@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import tech.timoapp.wavy.databinding.ItemProductBinding
 import tech.timoapp.wavy.model.Product
 
-class ProductAdapter(private val products: List<Product>) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter(
+    private val products: List<Product>,
+    private val onItemClicked: (String) -> Unit
+) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): ProductViewHolder {
         val binding = ItemProductBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -18,18 +20,21 @@ class ProductAdapter(private val products: List<Product>) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(
-        holder: ProductViewHolder,
-        position: Int
+        holder: ProductViewHolder, position: Int
     ) {
         val currentProduct = products[position]
         holder.bind(currentProduct)
+
+        holder.itemView.setOnClickListener {
+            onItemClicked(currentProduct.article) // передача артикула как ID (?)
+        }
     }
 
     override fun getItemCount(): Int {
         return products.size
     }
 
-    inner class ProductViewHolder(private val binding: ItemProductBinding) :
+    class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Product) {
             binding.ivProduct.setImageResource(product.imageRes)
