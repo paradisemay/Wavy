@@ -79,7 +79,7 @@ fun ImageContent(product: ProductDetailsModel) {
     Box(
         contentAlignment = Alignment.BottomStart,
     ) {
-        RoundedImage(product.imageRes)
+        RoundedImage(product.imageUrl)
         ContentBadge(product)
     }
 }
@@ -142,7 +142,7 @@ fun DetailsPageScreen(
 }
 
 val mockProduct = ProductDetailsModel(
-    imageRes = R.drawable.mock_product_image,
+    imageUrl = "",
     category = "Одежда",
     price = "1 104 ₽",
     article = "435789542",

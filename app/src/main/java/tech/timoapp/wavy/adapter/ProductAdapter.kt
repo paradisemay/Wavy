@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import tech.timoapp.wavy.R
 import tech.timoapp.wavy.databinding.ItemProductBinding
 import tech.timoapp.wavy.model.Product
 
@@ -35,7 +37,11 @@ class ProductAdapter(
     class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Product) {
-            binding.ivProduct.setImageResource(product.imageRes)
+            binding.ivProduct.load(product.imageUrl) {
+                crossfade(true)
+                placeholder(R.drawable.mock_product_image)
+                error(R.drawable.mock_product_image)
+            }
             binding.tvProductName.text = product.name
             binding.tvProductArticle.text = product.article
             binding.tvProductPrice.text = product.price

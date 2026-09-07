@@ -1,6 +1,5 @@
 package tech.timoapp.wavy.model
 
-import tech.timoapp.wavy.R
 import tech.timoapp.wavy.network.dto.ProductDto
 
 data class Product(
@@ -9,7 +8,7 @@ data class Product(
     val name: String,
     val price: String,
     val category: String,
-    val imageRes: Int
+    val imageUrl: String
 )
 
 
@@ -19,5 +18,5 @@ fun ProductDto.toProduct(): Product = Product(
     name = this.name,
     price = "${this.price} ₽",
     category = this.category,
-    imageRes = R.drawable.mock_product_image
+    imageUrl = if (this.imageUrl.startsWith("http")) this.imageUrl else "https://${this.imageUrl}"
 )
