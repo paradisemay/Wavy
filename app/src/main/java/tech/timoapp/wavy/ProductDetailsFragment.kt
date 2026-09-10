@@ -12,6 +12,7 @@ import tech.timoapp.wavy.model.ProductDetailsModel
 import tech.timoapp.wavy.model.toDetailsModel
 import tech.timoapp.wavy.network.RetrofitClient
 import tech.timoapp.wavy.ui.DetailsPageScreen
+import tech.timoapp.wavy.ui.DetailsPageSkeleton
 import tech.timoapp.wavy.util.safeApiCall
 
 class ProductDetailsFragment : Fragment() {
@@ -28,6 +29,8 @@ class ProductDetailsFragment : Fragment() {
                     DetailsPageScreen(
                         product = product,
                         onBackClick = { findNavController().popBackStack() })
+                } else {
+                    DetailsPageSkeleton(onBackClick = { findNavController().popBackStack() })
                 }
             }
         }
