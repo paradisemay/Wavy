@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.coroutines.launch
+import androidx.recyclerview.widget.RecyclerView
 import tech.timoapp.wavy.adapter.ProductAdapter
 import tech.timoapp.wavy.databinding.FragmentProductListBinding
-import tech.timoapp.wavy.model.Product
 import tech.timoapp.wavy.model.toProduct
 import tech.timoapp.wavy.network.RetrofitClient
 import tech.timoapp.wavy.util.safeApiCall
@@ -44,19 +42,56 @@ class ProductListFragment : Fragment() {
                 R.id.action_productListFragment_to_productDetailsFragment, bundle
             )
         }
-        loadProduct(myAdapter)
         binding.rvProducts.adapter = myAdapter
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvProducts.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
+
+        binding.rvSkeleton.adapter = SkeletonAdapter()
+        binding.rvSkeleton.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvSkeleton.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
+
+        loadProduct(myAdapter)
     }
 
     private fun loadProduct(adapter: ProductAdapter) {
+        binding.shimmerLayout.isVisible = true
+        binding.shimmerLayout.startShimmer()
+        binding.rvProducts.isVisible = false
+
         safeApiCall(
-            apiCall = { RetrofitClient.apiService.getProducts() },
+            apiCall = {
+                RetrofitClient.apiService.getProducts()
+            },
+            onError = {
+                binding.shimmerLayout.stopShimmer()
+                binding.shimmerLayout.isVisible = false
+            },
             onSuccess = { response ->
+                binding.shimmerLayout.isVisible = false
+                binding.shimmerLayout.stopShimmer()
+                binding.rvProducts.isVisible = true
+
                 val products = response.data.map { dto -> dto.toProduct() }
                 adapter.submitList(products)
             }
         )
     }
+}
+
+class SkeletonAdapter(private val count: Int = 10) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup, viewType: Int
+    ): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_product_skeleton, parent, false)
+        return object : RecyclerView.ViewHolder(view) {}
+    }
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder, position: Int
+    ) = Unit
+
+    override fun getItemCount(): Int = count
 }

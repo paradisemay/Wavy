@@ -291,3 +291,9 @@ fun DetailsPageScreenPreview() {
     DetailsPageScreen(
         product = mockProduct, onBackClick = {})
 }
+
+@Preview
+@Composable
+fun DetailsPageSkeletonPreview() {
+    DetailsPageSkeleton(onBackClick = {})
+}
