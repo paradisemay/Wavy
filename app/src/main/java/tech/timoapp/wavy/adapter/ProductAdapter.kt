@@ -38,9 +38,8 @@ class ProductAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Product) {
             binding.ivProduct.load(product.imageUrl) {
-                crossfade(true)
-                placeholder(R.drawable.mock_product_image)
-                error(R.drawable.mock_product_image)
+                placeholder(R.drawable.bg_shimmer_rounded)
+                error(R.drawable.bg_shimmer_rounded)
             }
             binding.tvProductName.text = product.name
             binding.tvProductArticle.text = product.article

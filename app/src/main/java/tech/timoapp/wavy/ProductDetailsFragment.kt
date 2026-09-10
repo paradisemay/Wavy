@@ -27,8 +27,7 @@ class ProductDetailsFragment : Fragment() {
                 val product = productState.value
                 if (product != null) {
                     DetailsPageScreen(
-                        product = product,
-                        onBackClick = { findNavController().popBackStack() })
+                        product = product, onBackClick = { findNavController().popBackStack() })
                 } else {
                     DetailsPageSkeleton(onBackClick = { findNavController().popBackStack() })
                 }
@@ -43,11 +42,11 @@ class ProductDetailsFragment : Fragment() {
     }
 
     private fun loadSelectedProduct(productId: String) {
-        safeApiCall(
-            apiCall = { RetrofitClient.apiService.getProductDetails(productId) },
-            onSuccess = { dto ->
-                productState.value = dto.toDetailsModel()
-            }
-        )
+        safeApiCall(apiCall = {
+//            kotlinx.coroutines.delay(1_000)
+            RetrofitClient.apiService.getProductDetails(productId)
+        }, onSuccess = { dto ->
+            productState.value = dto.toDetailsModel()
+        })
     }
 }

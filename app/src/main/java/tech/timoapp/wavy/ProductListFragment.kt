@@ -46,7 +46,8 @@ class ProductListFragment : Fragment() {
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvProducts.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
 
-        binding.rvSkeleton.adapter = SkeletonAdapter()
+        val skeletonCount = calculateSkeletonCount()
+        binding.rvSkeleton.adapter = SkeletonAdapter(skeletonCount)
         binding.rvSkeleton.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvSkeleton.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
 
@@ -60,6 +61,7 @@ class ProductListFragment : Fragment() {
 
         safeApiCall(
             apiCall = {
+//                kotlinx.coroutines.delay(1_000)
                 RetrofitClient.apiService.getProducts()
             },
             onError = {
@@ -75,6 +77,12 @@ class ProductListFragment : Fragment() {
                 adapter.submitList(products)
             }
         )
+    }
+
+    private fun calculateSkeletonCount(spanCount: Int = 2, itemHeightDp: Float = 280f): Int {
+        val displayMetrics = resources.displayMetrics
+        val screenHeightDp = displayMetrics.heightPixels / displayMetrics.density
+        return ((screenHeightDp / itemHeightDp).toInt() + spanCount - 1) * spanCount
     }
 }
 

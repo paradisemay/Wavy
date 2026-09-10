@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -64,8 +65,8 @@ fun FactorIdBlock(largeText: String, smallText: String, iconRes: Int) {
 fun RoundedImage(imageUrl: String) {
     AsyncImage(
         model = imageUrl,
-        placeholder = painterResource(R.drawable.mock_product_image),
-        error = painterResource(R.drawable.mock_product_image),
+        placeholder = ColorPainter(Color(0xFFE6E0E9)),
+        error = ColorPainter(Color(0xFFE6E0E9)),
         contentDescription = null,
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
