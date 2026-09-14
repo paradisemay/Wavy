@@ -11,4 +11,7 @@
     <color name="sub_text_color">#79747E</color>
     <color name="light_purple">#EADDFF</color>
     <color name="background_color">#FEF7FF</color>
+    <color name="green_text_color">#2ec500</color>
+    <color name="red_text_color">#b3261e</color>
+    <color name="dark_purple">#6750A4</color>
 </resources>
