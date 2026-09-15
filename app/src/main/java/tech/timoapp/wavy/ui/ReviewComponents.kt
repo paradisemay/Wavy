@@ -40,18 +40,29 @@ import tech.timoapp.wavy.model.RatingDistributionModel
 @Composable
 fun CommentCard(
     feedback: FeedbackModel,
+    modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onClick: (() -> Unit)? = null,
+    backgroundColor: Color = colorResource(R.color.light_purple),
 ) {
-    Column(
-        modifier = modifier
-            .background(
-                color = colorResource(R.color.light_purple), shape = RoundedCornerShape(16.dp)
-            )
-            .clickable(onClick = onClick)
-            .padding(10.dp)
-    ) {
+    val contentPadding = if (backgroundColor == Color.Transparent) 0.dp else 10.dp
+    val baseModifier = modifier
+        .then(
+            if (backgroundColor != Color.Transparent) {
+                Modifier.background(
+                    color = backgroundColor,
+                    shape = RoundedCornerShape(16.dp)
+                )
+            } else Modifier
+        )
+        .then(
+            if (onClick != null) {
+                Modifier.clickable(onClick = onClick)
+            } else Modifier
+        )
+        .padding(contentPadding)
+
+    Column(modifier = baseModifier) {
         if (feedback.isRefund) {
             Text(
                 text = "ВОЗВРАТ",
@@ -259,6 +270,52 @@ private fun RatingCell(
 }
 
 @Composable
+fun ProductHeader(
+    product: ProductFeedbacksModel,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AsyncImage(
+            model = product.imageUrl,
+            contentDescription = null,
+            modifier = Modifier
+                .size(64.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column {
+            Text(
+                text = product.name,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = colorResource(R.color.main_text_color),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = product.ordersCountFormatted,
+                    fontSize = 12.sp,
+                    color = colorResource(R.color.sub_text_color)
+                )
+                Text(
+                    text = product.refundsPercentFormatted,
+                    fontSize = 12.sp,
+                    color = colorResource(R.color.sub_text_color)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun ReviewBlock(
     product: ProductFeedbacksModel,
     onFeedbackClick: (FeedbackModel) -> Unit = {},
@@ -267,44 +324,7 @@ fun ReviewBlock(
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-        ) {
-            AsyncImage(
-                model = product.imageUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column {
-                Text(
-                    text = product.name,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colorResource(R.color.main_text_color),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        text = product.ordersCountFormatted,
-                        fontSize = 12.sp,
-                        color = colorResource(R.color.sub_text_color)
-                    )
-                    Text(
-                        text = product.refundsPercentFormatted,
-                        fontSize = 12.sp,
-                        color = colorResource(R.color.sub_text_color)
-                    )
-                }
-            }
-        }
+        ProductHeader(product = product)
 
         Spacer(modifier = Modifier.height(10.dp))
 
