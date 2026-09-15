@@ -14,4 +14,5 @@
     <color name="green_text_color">#2ec500</color>
     <color name="red_text_color">#b3261e</color>
     <color name="dark_purple">#6750A4</color>
+    <color name="light_purple_10">#196750A4</color>
 </resources>

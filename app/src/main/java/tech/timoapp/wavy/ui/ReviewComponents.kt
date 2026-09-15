@@ -43,7 +43,7 @@ fun CommentCard(
     modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
     onClick: (() -> Unit)? = null,
-    backgroundColor: Color = colorResource(R.color.light_purple),
+    backgroundColor: Color = colorResource(R.color.light_purple_10),
 ) {
     val contentPadding = if (backgroundColor == Color.Transparent) 0.dp else 10.dp
     val baseModifier = modifier
@@ -341,7 +341,9 @@ fun ReviewBlock(
                         feedback = feedback,
                         isExpanded = false,
                         onClick = { onFeedbackClick(feedback) },
-                        modifier = Modifier.fillParentMaxWidth(0.85f)
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.85f)
+                            .height(276.dp)
                     )
                 }
             }
