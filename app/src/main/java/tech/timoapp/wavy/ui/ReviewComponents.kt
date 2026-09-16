@@ -439,3 +439,44 @@ fun RatingDistributionBarPreview() {
         modifier = Modifier.padding(16.dp)
     )
 }
+
+@Composable
+fun CacheNotificationBanner(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = colorResource(R.color.light_purple).copy(alpha = 0.5f),
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Данные получены из кеша. Нажмите для обновления",
+            fontSize = 12.sp,
+            color = colorResource(R.color.dark_purple),
+            modifier = Modifier.weight(1f)
+        )
+        Text(
+            text = "↻",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = colorResource(R.color.dark_purple)
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CacheNotificationBannerPreview() {
+    CacheNotificationBanner(
+        onClick = {},
+        modifier = Modifier.padding(16.dp)
+    )
+}

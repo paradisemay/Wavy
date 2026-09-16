@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -86,7 +85,9 @@ fun ReviewsScreen(
 fun ReviewsContent(
     balance: BalanceModel,
     products: List<ProductFeedbacksModel>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isBalanceFromCache: Boolean = false,
+    onRefresh: () -> Unit = {},
 ) {
     var selectedReview by remember {
         mutableStateOf<Pair<ProductFeedbacksModel, FeedbackModel>?>(null)
@@ -104,6 +105,12 @@ fun ReviewsContent(
         ) {
             item {
                 BalanceCard(balance = balance)
+            }
+
+            if (isBalanceFromCache) {
+                item {
+                    CacheNotificationBanner(onClick = onRefresh)
+                }
             }
 
             if (balance.chartBars.isNotEmpty()) {
