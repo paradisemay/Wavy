@@ -6,9 +6,9 @@ import tech.timoapp.wavy.data.local.entity.toEntity
 import tech.timoapp.wavy.model.toBalanceModel
 import tech.timoapp.wavy.network.ApiService
 
-private const val STALE_TIME = 5 * 36 * 1000
+private const val STALE_TIME = 5 * 60 * 1000L
 
-class BalanceRespository(private val apiService: ApiService, private val balanceDao: BalanceDao) {
+class BalanceRepository(private val apiService: ApiService, private val balanceDao: BalanceDao) {
     suspend fun getBalance(forceRefresh: Boolean = false): BalanceResult {
         try {
             val response = apiService.getBalanceInfo()

@@ -30,9 +30,7 @@ import tech.timoapp.wavy.model.ReviewsUiState
 
 @Composable
 fun ReviewsScreen(
-    state: ReviewsUiState,
-    onRetry: () -> Unit,
-    modifier: Modifier = Modifier
+    state: ReviewsUiState, onRetry: () -> Unit, modifier: Modifier = Modifier
 ) {
     when (state) {
         is ReviewsUiState.Loading -> {
@@ -61,8 +59,7 @@ fun ReviewsScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        text = state.message,
-                        color = colorResource(R.color.main_text_color)
+                        text = state.message, color = colorResource(R.color.main_text_color)
                     )
                     Button(onClick = onRetry) {
                         Text(text = "Повторить")
@@ -75,7 +72,9 @@ fun ReviewsScreen(
             ReviewsContent(
                 balance = state.balance,
                 products = state.products,
-                modifier = modifier
+                isBalanceFromCache = state.isBalanceFromCache,
+                onRefresh = onRetry,
+                modifier = modifier,
             )
         }
     }
@@ -120,24 +119,17 @@ fun ReviewsContent(
             }
 
             items(
-                items = products,
-                key = { it.id }
-            ) { product ->
+                items = products, key = { it.id }) { product ->
                 ReviewBlock(
-                    product = product,
-                    onFeedbackClick = { feedback ->
+                    product = product, onFeedbackClick = { feedback ->
                         selectedReview = product to feedback
-                    }
-                )
+                    })
             }
         }
 
         selectedReview?.let { (product, feedback) ->
             ReviewDetailBottomSheet(
-                product = product,
-                feedback = feedback,
-                onDismiss = { selectedReview = null }
-            )
+                product = product, feedback = feedback, onDismiss = { selectedReview = null })
         }
     }
 }
@@ -146,8 +138,7 @@ fun ReviewsContent(
 @Composable
 fun ReviewsScreenSuccessPreview() {
     ReviewsContent(
-        balance = balanceModel,
-        products = listOf(mockProductFeedback)
+        balance = balanceModel, products = listOf(mockProductFeedback)
     )
 }
 
@@ -155,16 +146,12 @@ fun ReviewsScreenSuccessPreview() {
 @Composable
 fun ReviewsScreenLoadingPreview() {
     ReviewsScreen(
-        state = ReviewsUiState.Loading,
-        onRetry = {}
-    )
+        state = ReviewsUiState.Loading, onRetry = {})
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ReviewsScreenErrorPreview() {
     ReviewsScreen(
-        state = ReviewsUiState.Error("Не удалось загрузить данные"),
-        onRetry = {}
-    )
+        state = ReviewsUiState.Error("Не удалось загрузить данные"), onRetry = {})
 }

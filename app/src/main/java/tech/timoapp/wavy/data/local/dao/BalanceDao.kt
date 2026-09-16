@@ -16,5 +16,5 @@ interface BalanceDao {
     suspend fun getBalance(): BalanceEntity?
 
     @Query("DELETE FROM balance")
-    suspend fun clearBalance()
+    suspend fun clearBalance(): Int
 }
