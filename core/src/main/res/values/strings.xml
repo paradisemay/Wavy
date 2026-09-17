@@ -1,0 +1,10 @@
+<resources>
+    <string name="unreachable_section">Этот раздел пока не доступен.</string>
+    <string name="action_refresh">Обновить</string>
+    <string name="action_retry">Повторить</string>
+    <string name="action_back">Назад</string>
+    <string name="error_page_title">Страница не загружается</string>
+    <string name="error_page_subtitle">Проверьте подключение\nк интернету или выключите VPN</string>
+    <string name="error_default">Ошибка загрузки</string>
+    <string name="error_server">Ошибка сервера: %1$d</string>
+</resources>

@@ -5,10 +5,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import tech.timoapp.wavy.BuildConfig
+import tech.timoapp.wavy.core.BuildConfig
 import tech.timoapp.wavy.network.ApiService
 
-val networkModule = module {
+val coreNetworkModule = module {
     single {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -38,3 +38,5 @@ val networkModule = module {
         get<Retrofit>().create(ApiService::class.java)
     }
 }
+
+val networkModule = coreNetworkModule

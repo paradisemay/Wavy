@@ -38,8 +38,9 @@ data class FeedbackModel(
 )
 
 fun ProductFeedbackDto.toProductFeedbacksModel(): ProductFeedbacksModel {
-    val normalizedProductImage = if (imageUrl.isNullOrBlank()) ""
-    else if (imageUrl.startsWith("http")) imageUrl else "https://$imageUrl"
+    val imgUrl = imageUrl
+    val normalizedProductImage = if (imgUrl.isNullOrBlank()) ""
+    else if (imgUrl.startsWith("http")) imgUrl else "https://$imgUrl"
 
     val orders = ordersCount?.toString()?.filter { it.isDigit() }?.toIntOrNull() ?: 0
     val ordersFormatted = "${formatCount(orders)} ${getPluralOrders(orders)}"

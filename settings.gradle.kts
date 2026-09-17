@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Wavy"
 include(":app")
+include(":core")
  

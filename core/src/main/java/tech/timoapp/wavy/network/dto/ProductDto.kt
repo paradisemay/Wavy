@@ -2,7 +2,7 @@ package tech.timoapp.wavy.network.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class ProductDetailsDto (
+data class ProductDto (
     @SerializedName("id")
     val id: String,
 
@@ -15,24 +15,15 @@ data class ProductDetailsDto (
     @SerializedName("category")
     val category: String,
 
-    @SerializedName("description")
-    val description: String,
-
     @SerializedName("imageUrl")
     val imageUrl: String,
+
+    @SerializedName("isRemovable")
+    val isRemovable: Boolean,
 
     @SerializedName("oldPrice")
     val oldPrice: Double?,
 
     @SerializedName("price")
-    val price: Double,
-
-    @SerializedName("rating")
-    val rating: Double,
-
-    @SerializedName("warehouseQuantity")
-    val stockCount: Int,
-
-    @SerializedName("ordersCount")
-    val ordersCount: Int
+    val price: Double
 )

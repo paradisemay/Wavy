@@ -4,7 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import tech.timoapp.wavy.BuildConfig
+import tech.timoapp.wavy.core.BuildConfig
 
 object RetrofitClient {
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
