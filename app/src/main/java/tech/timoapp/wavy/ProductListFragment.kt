@@ -6,15 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import tech.timoapp.wavy.adapter.ProductAdapter
 import tech.timoapp.wavy.databinding.FragmentProductListBinding
-import tech.timoapp.wavy.model.toProduct
-import tech.timoapp.wavy.network.RetrofitClient
-import tech.timoapp.wavy.util.safeApiCall
+import tech.timoapp.wavy.model.ProductListUiState
 import tech.timoapp.wavy.viewmodel.ProductListViewModel
 
 class ProductListFragment : Fragment() {
@@ -54,32 +56,35 @@ class ProductListFragment : Fragment() {
         binding.rvSkeleton.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvSkeleton.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
 
-        loadProduct(myAdapter)
+        observeUiState(myAdapter)
     }
 
-    private fun loadProduct(adapter: ProductAdapter) {
-        binding.shimmerLayout.isVisible = true
-        binding.shimmerLayout.startShimmer()
-        binding.rvProducts.isVisible = false
+    private fun observeUiState(adapter: ProductAdapter) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is ProductListUiState.Loading -> {
+                            binding.shimmerLayout.isVisible = true
+                            binding.shimmerLayout.startShimmer()
+                            binding.rvProducts.isVisible = false
+                        }
 
-        safeApiCall(
-            apiCall = {
-//                kotlinx.coroutines.delay(1_000)
-                viewModel.getProducts()
-            },
-            onError = {
-                binding.shimmerLayout.stopShimmer()
-                binding.shimmerLayout.isVisible = false
-            },
-            onSuccess = { response ->
-                binding.shimmerLayout.isVisible = false
-                binding.shimmerLayout.stopShimmer()
-                binding.rvProducts.isVisible = true
+                        is ProductListUiState.Success -> {
+                            binding.shimmerLayout.stopShimmer()
+                            binding.shimmerLayout.isVisible = false
+                            binding.rvProducts.isVisible = true
+                            adapter.submitList(state.products)
+                        }
 
-                val products = response.data.map { dto -> dto.toProduct() }
-                adapter.submitList(products)
+                        is ProductListUiState.Error -> {
+                            binding.shimmerLayout.stopShimmer()
+                            binding.shimmerLayout.isVisible = false
+                        }
+                    }
+                }
             }
-        )
+        }
     }
 
     private fun calculateSkeletonCount(spanCount: Int = 2, itemHeightDp: Float = 280f): Int {
