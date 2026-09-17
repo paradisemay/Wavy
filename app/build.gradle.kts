@@ -56,6 +56,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":products"))
+    implementation(project(":reviews"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

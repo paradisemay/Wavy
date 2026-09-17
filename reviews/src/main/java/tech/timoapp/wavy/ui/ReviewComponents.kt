@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import tech.timoapp.wavy.R
+import tech.timoapp.wavy.reviews.R
 import tech.timoapp.wavy.model.FeedbackModel
 import tech.timoapp.wavy.model.ProductFeedbacksModel
 import tech.timoapp.wavy.model.RatingDistributionModel

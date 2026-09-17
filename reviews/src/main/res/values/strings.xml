@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rating">рейтинг</string>
+    <string name="cache_outdated_notification">Данные устарели,\nобновите страницу</string>
+    <string name="balance_title">Баланс</string>
+    <string name="sales_title">Продажи</string>
+    <string name="sold">продано</string>
+    <string name="refunds_label">возврата</string>
+    <string name="income">выручка</string>
+    <string name="refund">ВОЗВРАТ</string>
+    <string name="pros_prefix">Достоинства: </string>
+    <string name="cons_prefix">Недостатки: </string>
+</resources>

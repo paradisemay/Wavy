@@ -49,7 +49,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
 
     api(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    api(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging.interceptor)
 
     api(libs.koin.android)

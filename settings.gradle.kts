@@ -26,4 +26,5 @@ rootProject.name = "Wavy"
 include(":app")
 include(":core")
 include(":products")
+include(":reviews")
  

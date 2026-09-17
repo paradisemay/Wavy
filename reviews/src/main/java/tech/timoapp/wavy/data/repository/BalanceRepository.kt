@@ -8,8 +8,15 @@ import tech.timoapp.wavy.network.ApiService
 
 private const val STALE_TIME = 5 * 60 * 1000L
 
-class BalanceRepository(private val apiService: ApiService, private val balanceDao: BalanceDao) {
-    suspend fun getBalance(forceRefresh: Boolean = false): BalanceResult {
+interface BalanceRepository {
+    suspend fun getBalance(forceRefresh: Boolean = false): BalanceResult
+}
+
+class BalanceRepositoryImpl(
+    private val apiService: ApiService,
+    private val balanceDao: BalanceDao
+) : BalanceRepository {
+    override suspend fun getBalance(forceRefresh: Boolean): BalanceResult {
         try {
             val response = apiService.getBalanceInfo()
             if (response.isSuccessful && response.body() != null) {

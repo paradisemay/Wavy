@@ -16,6 +16,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import tech.timoapp.wavy.reviews.R
 import tech.timoapp.wavy.model.ReviewsUiState
 import tech.timoapp.wavy.ui.ReviewsScreen
 import tech.timoapp.wavy.viewmodel.ReviewsViewModel
