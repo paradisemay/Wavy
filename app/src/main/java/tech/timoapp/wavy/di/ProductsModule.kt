@@ -7,6 +7,7 @@ import tech.timoapp.wavy.data.repository.ProductRepositoryImpl
 import tech.timoapp.wavy.domain.usecase.AddProductUseCase
 import tech.timoapp.wavy.domain.usecase.DeleteProductUseCase
 import tech.timoapp.wavy.domain.usecase.GetProductDetailsUseCase
+import tech.timoapp.wavy.domain.usecase.GetProductsPagedUseCase
 import tech.timoapp.wavy.domain.usecase.GetProductsUseCase
 import tech.timoapp.wavy.viewmodel.ProductDetailsViewModel
 import tech.timoapp.wavy.viewmodel.ProductListViewModel
@@ -14,6 +15,7 @@ import tech.timoapp.wavy.viewmodel.ProductListViewModel
 val productsModule = module {
     single<ProductRepository> { ProductRepositoryImpl(get()) }
     factory { GetProductsUseCase(get()) }
+    factory { GetProductsPagedUseCase(get()) }
     factory { GetProductDetailsUseCase(get()) }
     factory { AddProductUseCase(get()) }
     factory { DeleteProductUseCase(get()) }
