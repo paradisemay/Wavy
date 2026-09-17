@@ -101,7 +101,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
 
-        <!-- TODO: закончить верстку-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

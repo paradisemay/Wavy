@@ -18,7 +18,9 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import tech.timoapp.wavy.adapter.ProductAdapter
 import tech.timoapp.wavy.adapter.ProductLoadStateAdapter
-import tech.timoapp.wavy.databinding.FragmentProductListBinding
+import tech.timoapp.wavy.adapter.SkeletonAdapter
+import tech.timoapp.wavy.products.R
+import tech.timoapp.wavy.products.databinding.FragmentProductListBinding
 import tech.timoapp.wavy.model.ProductListUiEvent
 import tech.timoapp.wavy.viewmodel.ProductListViewModel
 
@@ -214,22 +216,4 @@ class ProductListFragment : Fragment() {
         val screenHeightDp = displayMetrics.heightPixels / displayMetrics.density
         return ((screenHeightDp / itemHeightDp).toInt() + spanCount - 1) * spanCount
     }
-}
-
-class SkeletonAdapter(private val count: Int = 10) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int
-    ): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_product_skeleton, parent, false)
-        return object : RecyclerView.ViewHolder(view) {}
-    }
-
-    override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder, position: Int
-    ) = Unit
-
-    override fun getItemCount(): Int = count
 }

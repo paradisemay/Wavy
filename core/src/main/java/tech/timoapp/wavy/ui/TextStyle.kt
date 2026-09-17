@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import tech.timoapp.wavy.R
+import tech.timoapp.wavy.core.R
 
 @Composable
 fun BaseText(
@@ -31,7 +31,6 @@ fun BaseText(
     )
 }
 
-// 16 600
 @Composable
 fun MetricTitleText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -44,7 +43,6 @@ fun MetricTitleText(text: String, modifier: Modifier? = null, maxLines: Int? = 1
     )
 }
 
-// 12 500
 @Composable
 fun MetricMainText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -56,7 +54,6 @@ fun MetricMainText(text: String, modifier: Modifier? = null, maxLines: Int? = 1)
     )
 }
 
-// 14 400
 @Composable
 fun MetricBadgeText(
     text: String,
@@ -74,8 +71,6 @@ fun MetricBadgeText(
     )
 }
 
-
-// 14 500
 @Composable
 fun ReviewStarsText(
     text: String,
@@ -92,7 +87,6 @@ fun ReviewStarsText(
     )
 }
 
-// 45 400
 @Composable
 fun HugeText(
     text: String,
@@ -109,8 +103,6 @@ fun HugeText(
     )
 }
 
-
-// 11 500 white
 @Composable
 fun ChartText(
     text: String,
@@ -127,7 +119,6 @@ fun ChartText(
     )
 }
 
-// 24 500
 @Composable
 fun TitleText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -139,7 +130,6 @@ fun TitleText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     )
 }
 
-// 22 500
 @Composable
 fun LargeText(text: String, modifier: Modifier? = null, maxLines: Int? = 2) {
     BaseText(
@@ -151,7 +141,6 @@ fun LargeText(text: String, modifier: Modifier? = null, maxLines: Int? = 2) {
     )
 }
 
-// 16 400
 @Composable
 fun MainText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     BaseText(
@@ -164,7 +153,6 @@ fun MainText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     )
 }
 
-// 16 500
 @Composable
 fun MainStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -176,7 +164,6 @@ fun MainStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? =
     )
 }
 
-// 16 600
 @Composable
 fun MainBoldStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -189,7 +176,6 @@ fun MainBoldStatisticText(text: String, modifier: Modifier? = null, maxLines: In
     )
 }
 
-// 26 500
 @Composable
 fun LargeStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -201,7 +187,6 @@ fun LargeStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? 
     )
 }
 
-// 24 500 sub
 @Composable
 fun TitleSubText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(

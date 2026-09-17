@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import tech.timoapp.wavy.R
+import tech.timoapp.wavy.products.R
 import tech.timoapp.wavy.domain.model.Product
 import tech.timoapp.wavy.domain.model.ProductNotRemovableException
 import tech.timoapp.wavy.domain.usecase.AddProductUseCase

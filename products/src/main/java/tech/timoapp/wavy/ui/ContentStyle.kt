@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import tech.timoapp.wavy.R
+import tech.timoapp.wavy.products.R
 
 internal const val DESCRIPTION_COLLAPSED_MAX_LINES = 7
 

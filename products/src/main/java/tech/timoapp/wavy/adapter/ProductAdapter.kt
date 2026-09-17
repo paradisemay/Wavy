@@ -7,8 +7,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import tech.timoapp.wavy.R
-import tech.timoapp.wavy.databinding.ItemProductBinding
+import tech.timoapp.wavy.products.R
+import tech.timoapp.wavy.products.databinding.ItemProductBinding
 import tech.timoapp.wavy.domain.model.Product
 
 class ProductAdapter(

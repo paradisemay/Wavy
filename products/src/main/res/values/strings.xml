@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rating">рейтинг</string>
+    <string name="orders">заказов</string>
+    <string name="in_stock">на складе</string>
+    <string name="clothes">Одежда</string>
+    <string name="action_add_product">Добавить товар</string>
+    <string name="action_delete_product">Удалить товар</string>
+    <string name="error_add_product">Не удалось добавить товар</string>
+    <string name="error_delete_product">Не удалось удалить товар</string>
+    <string name="error_product_not_removable">Этот товар невозможно удалить</string>
+    <string name="empty_product_list_title">Список товаров пуст</string>
+    <string name="empty_product_list_subtitle">Попробуйте обновить страницу</string>
+    <string name="success_product_added">Товар успешно добавлен</string>
+    <string name="success_product_deleted">Товар удален</string>
+</resources>

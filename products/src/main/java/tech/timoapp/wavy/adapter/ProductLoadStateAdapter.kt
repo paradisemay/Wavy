@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
-import tech.timoapp.wavy.databinding.ItemProductLoadStateBinding
+import tech.timoapp.wavy.products.databinding.ItemProductLoadStateBinding
 
 class ProductLoadStateAdapter(
     private val retry: () -> Unit
