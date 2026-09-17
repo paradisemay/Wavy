@@ -46,6 +46,8 @@ class ProductListFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_productListFragment_to_productDetailsFragment, bundle
             )
+        }.apply {
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         binding.rvProducts.adapter = myAdapter
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -56,7 +58,16 @@ class ProductListFragment : Fragment() {
         binding.rvSkeleton.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvSkeleton.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
 
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.dark_purple)
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.loadProducts() }
+        binding.btnRetry.setOnClickListener { viewModel.loadProducts() }
+        binding.btnEmptyRetry.setOnClickListener { viewModel.loadProducts() }
+
         observeUiState(myAdapter)
+    }
+
+    fun scrollToTop() {
+        binding.rvProducts.smoothScrollToPosition(0)
     }
 
     private fun observeUiState(adapter: ProductAdapter) {
@@ -65,21 +76,41 @@ class ProductListFragment : Fragment() {
                 viewModel.uiState.collect { state ->
                     when (state) {
                         is ProductListUiState.Loading -> {
-                            binding.shimmerLayout.isVisible = true
-                            binding.shimmerLayout.startShimmer()
-                            binding.rvProducts.isVisible = false
+                            if (!binding.swipeRefreshLayout.isRefreshing) {
+                                binding.shimmerLayout.isVisible = true
+                                binding.shimmerLayout.startShimmer()
+                                binding.rvProducts.isVisible = false
+                            }
+                            binding.layoutError.isVisible = false
+                            binding.layoutEmpty.isVisible = false
                         }
 
                         is ProductListUiState.Success -> {
+                            binding.swipeRefreshLayout.isRefreshing = false
                             binding.shimmerLayout.stopShimmer()
                             binding.shimmerLayout.isVisible = false
+                            binding.layoutError.isVisible = false
+                            binding.layoutEmpty.isVisible = false
                             binding.rvProducts.isVisible = true
                             adapter.submitList(state.products)
                         }
 
-                        is ProductListUiState.Error -> {
+                        is ProductListUiState.Empty -> {
+                            binding.swipeRefreshLayout.isRefreshing = false
                             binding.shimmerLayout.stopShimmer()
                             binding.shimmerLayout.isVisible = false
+                            binding.layoutError.isVisible = false
+                            binding.rvProducts.isVisible = false
+                            binding.layoutEmpty.isVisible = true
+                        }
+
+                        is ProductListUiState.Error -> {
+                            binding.swipeRefreshLayout.isRefreshing = false
+                            binding.shimmerLayout.stopShimmer()
+                            binding.shimmerLayout.isVisible = false
+                            binding.layoutEmpty.isVisible = false
+                            binding.rvProducts.isVisible = false
+                            binding.layoutError.isVisible = true
                         }
                     }
                 }

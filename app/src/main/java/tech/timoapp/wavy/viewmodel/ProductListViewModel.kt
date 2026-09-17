@@ -24,7 +24,11 @@ class ProductListViewModel(
         _uiState.value = ProductListUiState.Loading
         viewModelScope.launch {
             repository.getProducts().onSuccess { products ->
-                _uiState.value = ProductListUiState.Success(products)
+                if (products.isEmpty()) {
+                    _uiState.value = ProductListUiState.Empty
+                } else {
+                    _uiState.value = ProductListUiState.Success(products)
+                }
             }.onFailure { error ->
                 _uiState.value =
                     ProductListUiState.Error(error.localizedMessage ?: "Ошибка загрузки")

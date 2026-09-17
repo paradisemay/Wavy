@@ -5,20 +5,31 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,42 +41,21 @@ import tech.timoapp.wavy.model.ReviewsUiState
 
 @Composable
 fun ReviewsScreen(
-    state: ReviewsUiState, onRetry: () -> Unit, modifier: Modifier = Modifier
+    state: ReviewsUiState,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+    scrollToTopTrigger: Int = 0
 ) {
     when (state) {
         is ReviewsUiState.Loading -> {
-            Box(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(colorResource(R.color.background_color)),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(
-                    color = colorResource(R.color.dark_purple)
-                )
-            }
+            ReviewsSkeleton(modifier = modifier)
         }
 
         is ReviewsUiState.Error -> {
-            Box(
+            ErrorStateScreen(
+                onRetry = onRetry,
                 modifier = modifier
-                    .fillMaxSize()
-                    .background(colorResource(R.color.background_color))
-                    .padding(24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Text(
-                        text = state.message, color = colorResource(R.color.main_text_color)
-                    )
-                    Button(onClick = onRetry) {
-                        Text(text = "Повторить")
-                    }
-                }
-            }
+            )
         }
 
         is ReviewsUiState.Success -> {
@@ -74,6 +64,7 @@ fun ReviewsScreen(
                 products = state.products,
                 isBalanceFromCache = state.isBalanceFromCache,
                 onRefresh = onRetry,
+                scrollToTopTrigger = scrollToTopTrigger,
                 modifier = modifier,
             )
         }
@@ -87,9 +78,16 @@ fun ReviewsContent(
     modifier: Modifier = Modifier,
     isBalanceFromCache: Boolean = false,
     onRefresh: () -> Unit = {},
+    scrollToTopTrigger: Int = 0,
 ) {
     var selectedReview by remember {
         mutableStateOf<Pair<ProductFeedbacksModel, FeedbackModel>?>(null)
+    }
+    val listState = rememberLazyListState()
+    LaunchedEffect(scrollToTopTrigger) {
+        if (scrollToTopTrigger > 0) {
+            listState.animateScrollToItem(0)
+        }
     }
 
     Box(
@@ -98,18 +96,18 @@ fun ReviewsContent(
             .background(colorResource(R.color.background_color))
     ) {
         LazyColumn(
+            state = listState,
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(
+                start = 16.dp,
+                end = 16.dp,
+                top = 16.dp,
+                bottom = if (isBalanceFromCache) 88.dp else 16.dp
+            ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
                 BalanceCard(balance = balance)
-            }
-
-            if (isBalanceFromCache) {
-                item {
-                    CacheNotificationBanner(onClick = onRefresh)
-                }
             }
 
             if (balance.chartBars.isNotEmpty()) {
@@ -125,6 +123,15 @@ fun ReviewsContent(
                         selectedReview = product to feedback
                     })
             }
+        }
+
+        if (isBalanceFromCache) {
+            CacheNotificationBanner(
+                onClick = onRefresh,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp)
+            )
         }
 
         selectedReview?.let { (product, feedback) ->
@@ -154,4 +161,105 @@ fun ReviewsScreenLoadingPreview() {
 fun ReviewsScreenErrorPreview() {
     ReviewsScreen(
         state = ReviewsUiState.Error("Не удалось загрузить данные"), onRetry = {})
+}
+
+@Composable
+fun ReviewsSkeleton(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_color))
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(130.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .purpleShimmerEffect()
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(115.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .purpleShimmerEffect()
+        )
+
+        repeat(2) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .shimmerEffect()
+                    )
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(16.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .shimmerEffect()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .width(48.dp)
+                                    .height(12.dp)
+                                    .clip(RoundedCornerShape(6.dp))
+                                    .shimmerEffect()
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .width(56.dp)
+                                    .height(12.dp)
+                                    .clip(RoundedCornerShape(6.dp))
+                                    .shimmerEffect()
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .purpleShimmerEffect()
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(240.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .softPurpleShimmerEffect()
+                )
+            }
+        }
+    }
 }
