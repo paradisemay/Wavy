@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import tech.timoapp.wavy.adapter.ProductAdapter
 import tech.timoapp.wavy.databinding.FragmentProductListBinding
+import tech.timoapp.wavy.model.ProductListUiEvent
 import tech.timoapp.wavy.model.ProductListUiState
 import tech.timoapp.wavy.viewmodel.ProductListViewModel
 
@@ -39,14 +40,19 @@ class ProductListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val myAdapter = ProductAdapter {
-            val bundle = Bundle().apply {
-                putString("PRODUCT_ID", it)
+        val myAdapter = ProductAdapter(
+            onItemClicked = { productId ->
+                val bundle = Bundle().apply {
+                    putString("PRODUCT_ID", productId)
+                }
+                findNavController().navigate(
+                    R.id.action_productListFragment_to_productDetailsFragment, bundle
+                )
+            },
+            onDeleteClicked = { productId ->
+                viewModel.deleteProduct(productId)
             }
-            findNavController().navigate(
-                R.id.action_productListFragment_to_productDetailsFragment, bundle
-            )
-        }.apply {
+        ).apply {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         binding.rvProducts.adapter = myAdapter
@@ -62,12 +68,50 @@ class ProductListFragment : Fragment() {
         binding.swipeRefreshLayout.setOnRefreshListener { viewModel.loadProducts() }
         binding.btnRetry.setOnClickListener { viewModel.loadProducts() }
         binding.btnEmptyRetry.setOnClickListener { viewModel.loadProducts() }
+        binding.fabAddProduct.setOnClickListener { viewModel.addProduct() }
 
         observeUiState(myAdapter)
+        observeEvents()
     }
 
     fun scrollToTop() {
         binding.rvProducts.smoothScrollToPosition(0)
+    }
+
+    private fun observeEvents() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.eventFlow.collect { event ->
+                    when (event) {
+                        is ProductListUiEvent.ProductAdded -> {
+                            android.widget.Toast.makeText(
+                                requireContext(),
+                                R.string.success_product_added,
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
+                            binding.rvProducts.smoothScrollToPosition(0)
+                        }
+                        is ProductListUiEvent.ProductDeleted -> {
+                            android.widget.Toast.makeText(
+                                requireContext(),
+                                R.string.success_product_deleted,
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        is ProductListUiEvent.Error -> {
+                            val message = event.messageRes?.let { getString(it) }
+                                ?: event.message
+                                ?: getString(R.string.error_default)
+                            android.widget.Toast.makeText(
+                                requireContext(),
+                                message,
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun observeUiState(adapter: ProductAdapter) {

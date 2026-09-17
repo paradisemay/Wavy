@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.timoapp.wavy.R
@@ -48,7 +49,7 @@ fun BalanceCard(balance: BalanceModel, modifier: Modifier = Modifier) {
                 start = 8.dp, top = 8.dp, end = 8.dp, bottom = 16.dp
             )
     ) {
-        MainStatisticText("Баланс")
+        MainStatisticText(stringResource(R.string.balance_title))
         HugeText(balance.balance)
         Spacer(modifier = Modifier.size(size = 16.dp))
         Row(
@@ -57,7 +58,7 @@ fun BalanceCard(balance: BalanceModel, modifier: Modifier = Modifier) {
         ) {
             MetricItem(
                 balance.shopRating,
-                "рейтинг",
+                stringResource(R.string.rating),
                 balance.ratingGrow,
                 if (balance.isRatingGrowPositive) colorResource(R.color.green_text_color)
                 else colorResource(R.color.red_text_color)
@@ -65,18 +66,21 @@ fun BalanceCard(balance: BalanceModel, modifier: Modifier = Modifier) {
 
             MetricItem(
                 balance.totalSalesCount,
-                "продано",
+                stringResource(R.string.sold),
                 balance.salesGrow,
                 if (balance.isSalesGrowPositive) colorResource(R.color.green_text_color)
                 else colorResource(R.color.red_text_color)
             )
 
             MetricItem(
-                balance.totalRefundsCount, "возврата", balance.totalRefundsPercent
+                balance.totalRefundsCount,
+                stringResource(R.string.refunds_label),
+                balance.totalRefundsPercent
             )
 
             MetricItem(
-                balance.income, "выручка"
+                balance.income,
+                stringResource(R.string.income)
             )
         }
     }
@@ -175,7 +179,7 @@ fun SalesChartCard(balance: BalanceModel, modifier: Modifier = Modifier) {
             )
             .padding(8.dp)
     ) {
-        MainStatisticText("Продажи")
+        MainStatisticText(stringResource(R.string.sales_title))
         MainBoldStatisticText(balance.sales)
         Spacer(modifier = Modifier.size(4.dp))
         Row(

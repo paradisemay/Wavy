@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -68,7 +69,7 @@ fun CommentCard(
     Column(modifier = baseModifier) {
         if (feedback.isRefund) {
             Text(
-                text = "ВОЗВРАТ",
+                text = stringResource(R.string.refund),
                 color = colorResource(R.color.red_text_color),
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
@@ -127,6 +128,7 @@ fun CommentCard(
         }
 
         if (feedback.pros != null) {
+            val prosPrefix = stringResource(R.string.pros_prefix)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = buildAnnotatedString {
@@ -136,7 +138,7 @@ fun CommentCard(
                             color = colorResource(R.color.main_text_color)
                         )
                     ) {
-                        append("Достоинства: ")
+                        append(prosPrefix)
                     }
                     withStyle(SpanStyle(color = colorResource(R.color.main_text_color))) {
                         append(feedback.pros)
@@ -146,6 +148,7 @@ fun CommentCard(
         }
 
         if (feedback.cons != null) {
+            val consPrefix = stringResource(R.string.cons_prefix)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = buildAnnotatedString {
@@ -155,7 +158,7 @@ fun CommentCard(
                             color = colorResource(R.color.main_text_color)
                         )
                     ) {
-                        append("Недостатки: ")
+                        append(consPrefix)
                     }
                     withStyle(SpanStyle(color = colorResource(R.color.main_text_color))) {
                         append(feedback.cons)
@@ -460,7 +463,7 @@ fun CacheNotificationBanner(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Данные устарели,\nобновите страницу",
+            text = stringResource(R.string.cache_outdated_notification),
             fontSize = 14.sp,
             lineHeight = 18.sp,
             fontWeight = FontWeight.Medium,
@@ -477,7 +480,7 @@ fun CacheNotificationBanner(
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 6.dp)
         ) {
             Text(
-                text = "Обновить",
+                text = stringResource(R.string.action_refresh),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )

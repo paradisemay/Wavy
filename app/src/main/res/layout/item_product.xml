@@ -27,11 +27,14 @@
 
         <ImageView
             android:id="@+id/ivDelete"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="4dp"
             android:background="@drawable/bg_circle_icon"
-            android:padding="6.5dp"
+            android:clickable="true"
+            android:contentDescription="@string/action_delete_product"
+            android:focusable="true"
+            android:padding="9dp"
             android:src="@drawable/ic_delete"
             app:layout_constraintEnd_toEndOf="@id/ivProduct"
             app:layout_constraintTop_toTopOf="@id/ivProduct" />
@@ -52,10 +55,9 @@
                 android:maxLines="1"
                 android:paddingHorizontal="9dp"
                 android:paddingVertical="2dp"
-                android:text="Канцелярия"
                 android:textColor="#1D1B20"
                 android:textSize="14sp"
-                tools:text="############################################" />
+                tools:text="Канцелярия" />
         </FrameLayout>
 
         <TextView
@@ -66,12 +68,12 @@
             android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="732 — 1 104 ₽"
             android:textColor="#1D1B20"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivProduct" />
+            app:layout_constraintTop_toBottomOf="@id/ivProduct"
+            tools:text="732 — 1 104 ₽" />
 
         <TextView
             android:id="@+id/tvProductName"
@@ -80,12 +82,12 @@
             android:layout_marginHorizontal="8dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="Блузка боди на запах без рукавов"
             android:textColor="#1D1B20"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProductPrice" />
+            app:layout_constraintTop_toBottomOf="@id/tvProductPrice"
+            tools:text="Блузка боди на запах без рукавов" />
 
         <TextView
             android:id="@+id/tvProductArticle"
@@ -96,13 +98,13 @@
             android:layout_marginBottom="20dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="435789542"
             android:textColor="#79747E"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProductName" />
+            app:layout_constraintTop_toBottomOf="@id/tvProductName"
+            tools:text="435789542" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -2,16 +2,18 @@ package tech.timoapp.wavy.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import tech.timoapp.wavy.R
 import tech.timoapp.wavy.databinding.ItemProductBinding
-import tech.timoapp.wavy.model.Product
+import tech.timoapp.wavy.domain.model.Product
 
 class ProductAdapter(
-    private val onItemClicked: (String) -> Unit
+    private val onItemClicked: (String) -> Unit,
+    private val onDeleteClicked: (String) -> Unit
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(
@@ -20,7 +22,23 @@ class ProductAdapter(
         val binding = ItemProductBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return ProductViewHolder(binding)
+        val holder = ProductViewHolder(binding)
+        binding.root.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                onItemClicked(getItem(position).id)
+            }
+        }
+        binding.ivDelete.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val item = getItem(position)
+                if (item.isRemovable) {
+                    onDeleteClicked(item.id)
+                }
+            }
+        }
+        return holder
     }
 
     override fun onBindViewHolder(
@@ -28,10 +46,6 @@ class ProductAdapter(
     ) {
         val currentProduct = getItem(position)
         holder.bind(currentProduct)
-
-        holder.itemView.setOnClickListener {
-            onItemClicked(currentProduct.id)
-        }
     }
 
     class ProductViewHolder(private val binding: ItemProductBinding) :
@@ -45,6 +59,7 @@ class ProductAdapter(
             binding.tvProductArticle.text = product.article
             binding.tvProductPrice.text = product.price
             binding.tvProductTag.text = product.category
+            binding.ivDelete.isVisible = product.isRemovable
         }
     }
 
