@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -19,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -79,7 +82,7 @@ fun ImageContent(product: ProductDetailsModel) {
     Box(
         contentAlignment = Alignment.BottomStart,
     ) {
-        RoundedImage(product.imageRes)
+        RoundedImage(product.imageUrl)
         ContentBadge(product)
     }
 }
@@ -141,8 +144,97 @@ fun DetailsPageScreen(
     }
 }
 
+@Composable
+fun DetailsPageSkeleton(onBackClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_color))
+            .verticalScroll(rememberScrollState())
+    ) {
+        IconButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .padding(start = 4.dp, top = 8.dp, bottom = 8.dp)
+                .size(48.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back),
+                contentDescription = null,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        Box(contentAlignment = Alignment.BottomStart) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(340.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .shimmerEffect()
+            )
+            Box(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(80.dp)
+                    .height(24.dp)
+                    .clip(RoundedCornerShape(48.dp))
+                    .background(colorResource(R.color.white))
+            )
+        }
+
+        Column(modifier = Modifier.padding(vertical = 10.dp, horizontal = 12.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(130.dp)
+                        .height(24.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .shimmerEffect()
+                )
+                Box(
+                    modifier = Modifier
+                        .width(70.dp)
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .shimmerEffect()
+                )
+            }
+            Spacer(modifier = Modifier.size(10.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .height(22.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .shimmerEffect()
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(colorResource(R.color.light_purple))
+            )
+            Spacer(modifier = Modifier.size(24.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(110.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .shimmerEffect()
+            )
+        }
+    }
+}
+
 val mockProduct = ProductDetailsModel(
-    imageRes = R.drawable.mock_product_image,
+    imageUrl = "",
     category = "Одежда",
     price = "1 104 ₽",
     article = "435789542",
@@ -198,4 +290,10 @@ fun ProductDescriptionPreview() {
 fun DetailsPageScreenPreview() {
     DetailsPageScreen(
         product = mockProduct, onBackClick = {})
+}
+
+@Preview
+@Composable
+fun DetailsPageSkeletonPreview() {
+    DetailsPageSkeleton(onBackClick = {})
 }

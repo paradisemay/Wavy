@@ -1,8 +1,13 @@
 package tech.timoapp.wavy.ui
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,12 +27,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import tech.timoapp.wavy.R
 
 internal const val DESCRIPTION_COLLAPSED_MAX_LINES = 7
@@ -52,9 +62,11 @@ fun FactorIdBlock(largeText: String, smallText: String, iconRes: Int) {
 }
 
 @Composable
-fun RoundedImage(imageRes: Int) {
-    Image(
-        painter = painterResource(imageRes),
+fun RoundedImage(imageUrl: String) {
+    AsyncImage(
+        model = imageUrl,
+        placeholder = ColorPainter(Color(0xFFE6E0E9)),
+        error = ColorPainter(Color(0xFFE6E0E9)),
         contentDescription = null,
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
@@ -83,7 +95,7 @@ fun Badge(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 @Composable
 fun RoundedImagePreview() {
     RoundedImage(
-        imageRes = R.drawable.mock_product_image
+        imageUrl = ""
     )
 }
 
@@ -137,4 +149,33 @@ fun DescriptionContentPreview() {
             maxLines = if (isExpanded) Int.MAX_VALUE else DESCRIPTION_COLLAPSED_MAX_LINES
         )
     }
+}
+
+
+@Composable
+fun Modifier.shimmerEffect(): Modifier {
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val translateAnim by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1000f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "shimmer_anim"
+    )
+
+    val shimmerColors = listOf(
+        Color(0xFFE6E0E9),
+        Color(0xFFF5F0F7),
+        Color(0xFFE6E0E9)
+    )
+
+    return this.background(
+        brush = Brush.linearGradient(
+            colors = shimmerColors,
+            start = Offset(x = translateAnim - 500f, y = translateAnim - 500f),
+            end = Offset(x = translateAnim, y = translateAnim)
+        )
+    )
 }

@@ -4,83 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import tech.timoapp.wavy.adapter.ProductAdapter
 import tech.timoapp.wavy.databinding.FragmentProductListBinding
-import tech.timoapp.wavy.model.Product
+import tech.timoapp.wavy.model.toProduct
+import tech.timoapp.wavy.network.RetrofitClient
+import tech.timoapp.wavy.util.safeApiCall
 
 class ProductListFragment : Fragment() {
-
-    companion object {
-        fun getMockProducts() = listOf(
-            Product(
-                article = "435789101",
-                name = "Блузка боди на запах без рукавов",
-                price = "732 — 1 104 ₽",
-                category = "Одежда",
-                imageRes = R.drawable.mock_product_image
-            ),
-            Product(
-                article = "435789102",
-                name = "Чехол для iPad Air 1",
-                price = "1 653 ₽",
-                category = "Техника",
-                imageRes = R.drawable.mock_product_image_3
-            ),
-            Product(
-                article = "435789103",
-                name = "Механический милый ластик для школы и офиса",
-                price = "126 ₽",
-                category = "Канцелярия",
-                imageRes = R.drawable.mock_product_image_4
-            ),
-            Product(
-                article = "435789104",
-                name = "Боди блузка с длинными рукавами",
-                price = "2 459 ₽",
-                category = "Одежда",
-                imageRes = R.drawable.mock_product_image_2
-            ),
-            Product(
-                article = "435789105",
-                name = "Худи оверсайз Maybeс",
-                price = "2 660 ₽",
-                category = "Одежда",
-                imageRes = R.drawable.mock_product_image_5
-            ),
-            Product(
-                article = "435789106",
-                name = "Apple · Watch Series 8 GPS 45mm",
-                price = "27 660 ₽",
-                category = "Техника",
-                imageRes = R.drawable.mock_product_image_6
-            ),
-            Product(
-                article = "435789107",
-                name = "Блузка боди на запах без рукавов",
-                price = "2 235 ₽",
-                category = "Одежда",
-                imageRes = R.drawable.mock_product_image_7
-            ),
-            Product(
-                article = "435789108",
-                name = "Точилка механическая",
-                price = "138 ₽",
-                category = "Техника",
-                imageRes = R.drawable.mock_product_image_8
-            ),
-        )
-    }
 
     private var _binding: FragmentProductListBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductListBinding.inflate(inflater, container, false)
         return binding.root
@@ -93,19 +34,72 @@ class ProductListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val myData = getMockProducts()
-        val myAdapter = ProductAdapter(myData) {
-            val bundle = Bundle()
-            bundle.putString("PRODUCT_ID", it)
+        val myAdapter = ProductAdapter {
+            val bundle = Bundle().apply {
+                putString("PRODUCT_ID", it)
+            }
             findNavController().navigate(
-                R.id.action_productListFragment_to_productDetailsFragment,
-                bundle
+                R.id.action_productListFragment_to_productDetailsFragment, bundle
             )
         }
         binding.rvProducts.adapter = myAdapter
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
-
         binding.rvProducts.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
+
+        val skeletonCount = calculateSkeletonCount()
+        binding.rvSkeleton.adapter = SkeletonAdapter(skeletonCount)
+        binding.rvSkeleton.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvSkeleton.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
+
+        loadProduct(myAdapter)
     }
+
+    private fun loadProduct(adapter: ProductAdapter) {
+        binding.shimmerLayout.isVisible = true
+        binding.shimmerLayout.startShimmer()
+        binding.rvProducts.isVisible = false
+
+        safeApiCall(
+            apiCall = {
+//                kotlinx.coroutines.delay(1_000)
+                RetrofitClient.apiService.getProducts()
+            },
+            onError = {
+                binding.shimmerLayout.stopShimmer()
+                binding.shimmerLayout.isVisible = false
+            },
+            onSuccess = { response ->
+                binding.shimmerLayout.isVisible = false
+                binding.shimmerLayout.stopShimmer()
+                binding.rvProducts.isVisible = true
+
+                val products = response.data.map { dto -> dto.toProduct() }
+                adapter.submitList(products)
+            }
+        )
+    }
+
+    private fun calculateSkeletonCount(spanCount: Int = 2, itemHeightDp: Float = 280f): Int {
+        val displayMetrics = resources.displayMetrics
+        val screenHeightDp = displayMetrics.heightPixels / displayMetrics.density
+        return ((screenHeightDp / itemHeightDp).toInt() + spanCount - 1) * spanCount
+    }
+}
+
+class SkeletonAdapter(private val count: Int = 10) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup, viewType: Int
+    ): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_product_skeleton, parent, false)
+        return object : RecyclerView.ViewHolder(view) {}
+    }
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder, position: Int
+    ) = Unit
+
+    override fun getItemCount(): Int = count
 }
