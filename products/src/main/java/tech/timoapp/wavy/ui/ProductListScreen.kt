@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,6 +70,7 @@ fun ProductListScreen(
     scrollToTopTrigger: Int = 0
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val lazyPagingItems = viewModel.productsPagingFlow.collectAsLazyPagingItems()
     val listState = rememberLazyGridState()
 
@@ -101,9 +103,9 @@ fun ProductListScreen(
                 }
 
                 is ProductListUiEvent.Error -> {
-                    val message = event.messageRes?.let { context.getString(it) }
+                    val message = event.messageRes?.let(resources::getString)
                         ?: event.message
-                        ?: context.getString(tech.timoapp.wavy.core.R.string.error_default)
+                        ?: resources.getString(tech.timoapp.wavy.core.R.string.error_default)
                     Toast.makeText(
                         context,
                         message,
@@ -118,7 +120,7 @@ fun ProductListScreen(
     LaunchedEffect(appendState) {
         if (appendState is LoadState.Error) {
             val message = appendState.error.localizedMessage
-                ?: context.getString(tech.timoapp.wavy.core.R.string.error_default)
+                ?: resources.getString(tech.timoapp.wavy.core.R.string.error_default)
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }

@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowInsetsControllerCompat
+import org.koin.compose.KoinContext
+import org.koin.core.context.GlobalContext
 import tech.timoapp.wavy.ui.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +16,9 @@ class MainActivity : ComponentActivity() {
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
         setContent {
-            MainScreen()
+            KoinContext(GlobalContext.get()) {
+                MainScreen()
+            }
         }
     }
 }
