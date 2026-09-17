@@ -9,14 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import tech.timoapp.wavy.adapter.ProductAdapter
 import tech.timoapp.wavy.databinding.FragmentProductListBinding
 import tech.timoapp.wavy.model.toProduct
 import tech.timoapp.wavy.network.RetrofitClient
 import tech.timoapp.wavy.util.safeApiCall
+import tech.timoapp.wavy.viewmodel.ProductListViewModel
 
 class ProductListFragment : Fragment() {
 
+    private val viewModel: ProductListViewModel by viewModel()
     private var _binding: FragmentProductListBinding? = null
     private val binding get() = _binding!!
 
@@ -62,7 +65,7 @@ class ProductListFragment : Fragment() {
         safeApiCall(
             apiCall = {
 //                kotlinx.coroutines.delay(1_000)
-                RetrofitClient.apiService.getProducts()
+                viewModel.getProducts()
             },
             onError = {
                 binding.shimmerLayout.stopShimmer()
