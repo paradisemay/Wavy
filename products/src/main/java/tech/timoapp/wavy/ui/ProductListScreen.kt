@@ -53,10 +53,10 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import org.koin.androidx.compose.koinViewModel
 import tech.timoapp.wavy.domain.model.Product
+import tech.timoapp.wavy.analytics.LocalAnalyticsTracker
 import tech.timoapp.wavy.model.ProductListUiEvent
 import tech.timoapp.wavy.products.R
 import tech.timoapp.wavy.viewmodel.ProductListViewModel
@@ -71,6 +71,7 @@ fun ProductListScreen(
 ) {
     val context = LocalContext.current
     val resources = LocalResources.current
+    val analyticsTracker = LocalAnalyticsTracker.current
     val lazyPagingItems = viewModel.productsPagingFlow.collectAsLazyPagingItems()
     val listState = rememberLazyGridState()
 
@@ -163,15 +164,24 @@ fun ProductListScreen(
                     ProductListGrid(
                         lazyPagingItems = lazyPagingItems,
                         listState = listState,
-                        onProductClick = onProductClick,
-                        onDeleteClick = { viewModel.deleteProduct(it) }
+                        onProductClick = { productId ->
+                            analyticsTracker.logProductClick()
+                            onProductClick(productId)
+                        },
+                        onDeleteClick = { productId ->
+                            analyticsTracker.logDeleteProductClick()
+                            viewModel.deleteProduct(productId)
+                        }
                     )
                 }
             }
         }
 
         FloatingActionButton(
-            onClick = { viewModel.addProduct() },
+            onClick = {
+                analyticsTracker.logAddProductClick()
+                viewModel.addProduct()
+            },
             containerColor = colorResource(tech.timoapp.wavy.core.R.color.dark_purple),
             contentColor = Color.White,
             shape = RoundedCornerShape(16.dp),
@@ -205,8 +215,7 @@ fun ProductListGrid(
         modifier = modifier.fillMaxSize()
     ) {
         items(
-            count = lazyPagingItems.itemCount,
-            key = lazyPagingItems.itemKey { it.id }
+            count = lazyPagingItems.itemCount
         ) { index ->
             val product = lazyPagingItems[index]
             if (product != null) {
@@ -263,12 +272,24 @@ fun ProductCard(
                     .aspectRatio(0.75f)
                     .clip(RoundedCornerShape(20.dp))
             ) {
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = product.imageUrl,
                     contentDescription = product.name,
                     contentScale = ContentScale.Crop,
-                    placeholder = painterResource(R.drawable.mock_product_image),
-                    error = painterResource(R.drawable.mock_product_image),
+                    loading = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .shimmerEffect()
+                        )
+                    },
+                    error = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(colorResource(tech.timoapp.wavy.core.R.color.light_purple))
+                        )
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
 
