@@ -1,5 +1,8 @@
 package tech.timoapp.wavy.ui
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,8 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -130,27 +139,66 @@ fun BalanceCardPreview() {
 }
 
 @Composable
-fun ChartItem(bar: SalesBarModel, modifier: Modifier = Modifier) {
+fun ChartItem(
+    bar: SalesBarModel,
+    animationDelayMillis: Int,
+    modifier: Modifier = Modifier
+) {
+    var animationStarted by remember(bar) { mutableStateOf(false) }
+    LaunchedEffect(bar) {
+        animationStarted = true
+    }
+    val barProgress by animateFloatAsState(
+        targetValue = if (animationStarted) bar.fraction else 0f,
+        animationSpec = tween(
+            durationMillis = 700,
+            delayMillis = animationDelayMillis,
+            easing = FastOutSlowInEasing
+        ),
+        label = "sales_bar_progress"
+    )
+    val barAlpha by animateFloatAsState(
+        targetValue = if (animationStarted) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 280,
+            delayMillis = animationDelayMillis,
+            easing = FastOutSlowInEasing
+        ),
+        label = "sales_bar_alpha"
+    )
+    val textAlpha by animateFloatAsState(
+        targetValue = if (animationStarted) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 280,
+            delayMillis = animationDelayMillis + 260,
+            easing = FastOutSlowInEasing
+        ),
+        label = "sales_bar_text_alpha"
+    )
+
     Column(
         modifier = modifier
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(bar.fraction.dp * 49)
+                .height(49.dp * barProgress)
+                .alpha(barAlpha)
                 .background(colorResource(R.color.dark_purple))
         ) {
             if (bar.growthBadge != null) {
                 ChartText(
                     bar.growthBadge,
                     color = colorResource(R.color.white),
-                    modifier = Modifier.padding(top = 2.dp, start = 2.dp)
+                    modifier = Modifier
+                        .alpha(textAlpha)
+                        .padding(top = 2.dp, start = 2.dp)
                 )
             }
         }
         Spacer(modifier = Modifier.size(2.dp))
-        ChartText(bar.monthName)
-        ChartText(bar.amountFormatted)
+        ChartText(bar.monthName, modifier = Modifier.alpha(textAlpha))
+        ChartText(bar.amountFormatted, modifier = Modifier.alpha(textAlpha))
     }
 }
 
@@ -163,7 +211,9 @@ fun ChartItemPreview() {
             amountFormatted = "55 210 ₽",
             fraction = 1.0f,
             growthBadge = "+9,8%"
-        ), modifier = Modifier
+        ),
+        animationDelayMillis = 0,
+        modifier = Modifier
             .padding(16.dp)
             .size(width = 80.dp, height = 80.dp)
     )
@@ -186,9 +236,11 @@ fun SalesChartCard(balance: BalanceModel, modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
         ) {
-            balance.chartBars.forEach { bar ->
+            balance.chartBars.forEachIndexed { index, bar ->
                 ChartItem(
-                    bar = bar, modifier = Modifier.weight(1f).align(Alignment.Bottom)
+                    bar = bar,
+                    animationDelayMillis = index * 100,
+                    modifier = Modifier.weight(1f).align(Alignment.Bottom)
                 )
             }
         }
