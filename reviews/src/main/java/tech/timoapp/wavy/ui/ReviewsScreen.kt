@@ -33,11 +33,42 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import org.koin.androidx.compose.koinViewModel
+import tech.timoapp.wavy.viewmodel.ReviewsViewModel
 import tech.timoapp.wavy.reviews.R
 import tech.timoapp.wavy.model.BalanceModel
 import tech.timoapp.wavy.model.FeedbackModel
 import tech.timoapp.wavy.model.ProductFeedbacksModel
 import tech.timoapp.wavy.model.ReviewsUiState
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReviewsRoute(
+    modifier: Modifier = Modifier,
+    viewModel: ReviewsViewModel = koinViewModel(),
+    scrollToTopTrigger: Int = 0
+) {
+    val state = viewModel.uiState.value
+    val isRefreshing = state is ReviewsUiState.Loading
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = { viewModel.loadReviewsData() },
+        state = pullToRefreshState,
+        modifier = modifier.fillMaxSize()
+    ) {
+        ReviewsScreen(
+            state = state,
+            onRetry = { viewModel.loadReviewsData() },
+            scrollToTopTrigger = scrollToTopTrigger,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
 
 @Composable
 fun ReviewsScreen(

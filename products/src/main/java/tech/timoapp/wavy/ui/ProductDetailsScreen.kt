@@ -27,8 +27,47 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import org.koin.androidx.compose.koinViewModel
+import tech.timoapp.wavy.model.ProductDetailsUiState
+import tech.timoapp.wavy.viewmodel.ProductDetailsViewModel
 import tech.timoapp.wavy.products.R
 import tech.timoapp.wavy.model.ProductDetailsState
+
+@Composable
+fun ProductDetailsRoute(
+    productId: String,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: ProductDetailsViewModel = koinViewModel()
+) {
+    LaunchedEffect(productId) {
+        viewModel.loadProduct(productId)
+    }
+
+    val state by viewModel.uiState.collectAsState()
+    when (val currentState = state) {
+        is ProductDetailsUiState.Success -> {
+            DetailsPageScreen(
+                product = currentState.product,
+                onBackClick = onBackClick
+            )
+        }
+        is ProductDetailsUiState.Error -> {
+            ErrorStateScreen(
+                onRetry = { viewModel.loadProduct(productId) },
+                onBackClick = onBackClick
+            )
+        }
+        is ProductDetailsUiState.Loading -> {
+            DetailsPageSkeleton(
+                onBackClick = onBackClick
+            )
+        }
+    }
+}
 
 @Composable
 fun TitleAndPriceContent(product: ProductDetailsState) {
