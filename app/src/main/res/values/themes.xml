@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Theme.Wavy" parent="android:Theme.Material.Light.NoActionBar" />
-    <style name="RoundedImage">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">20dp</item>
-    </style>
 </resources>
