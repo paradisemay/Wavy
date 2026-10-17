@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import tech.timoapp.wavy.data.repository.ProductRepository
+import tech.timoapp.wavy.domain.usecase.GetProductDetailsUseCase
 import tech.timoapp.wavy.model.ProductDetailsUiState
 
 class ProductDetailsViewModel(
-    private val repository: ProductRepository
+    private val getProductDetailsUseCase: GetProductDetailsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.Loading)
@@ -19,7 +19,7 @@ class ProductDetailsViewModel(
     fun loadProduct(productId: String) {
         _uiState.value = ProductDetailsUiState.Loading
         viewModelScope.launch {
-            repository.getProductDetails(productId).onSuccess { product ->
+            getProductDetailsUseCase(productId).onSuccess { product ->
                 _uiState.value = ProductDetailsUiState.Success(product)
             }.onFailure { error ->
                 _uiState.value =

@@ -27,6 +27,8 @@
             android:id="@+id/rvProducts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp"
             android:visibility="gone"
             tools:listitem="@layout/item_product" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -44,7 +46,7 @@
             android:id="@+id/tvErrorTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Страница не загружается"
+            android:text="@string/error_page_title"
             android:textColor="@color/main_text_color"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -56,7 +58,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:lineSpacingExtra="4sp"
-            android:text="Проверьте подключение&#10;к интернету или выключите VPN"
+            android:text="@string/error_page_subtitle"
             android:textColor="@color/sub_text_color"
             android:textSize="14sp" />
 
@@ -66,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:backgroundTint="@color/dark_purple"
-            android:text="Обновить"
+            android:text="@string/action_refresh"
             android:textColor="@color/white"
             app:cornerRadius="20dp" />
     </LinearLayout>
@@ -90,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Список товаров пуст"
+            android:text="@string/empty_product_list_title"
             android:textColor="@color/main_text_color"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -99,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Попробуйте обновить страницу"
+            android:text="@string/empty_product_list_subtitle"
             android:textColor="@color/sub_text_color"
             android:textSize="14sp" />
 
@@ -109,9 +111,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:backgroundTint="@color/dark_purple"
-            android:text="Обновить"
+            android:text="@string/action_refresh"
             android:textColor="@color/white"
             app:cornerRadius="20dp" />
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/action_add_product"
+        android:src="@drawable/ic_plus"
+        app:backgroundTint="@color/dark_purple"
+        app:tint="@color/white" />
 
 </FrameLayout>

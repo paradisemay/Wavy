@@ -6,4 +6,38 @@
     <string name="orders">заказов</string>
     <string name="in_stock">на складе</string>
     <string name="clothes">Одежда</string>
+
+    <string name="menu_products">Товары</string>
+    <string name="menu_reviews">Отзывы</string>
+
+    <string name="action_refresh">Обновить</string>
+    <string name="action_retry">Повторить</string>
+    <string name="action_back">Назад</string>
+    <string name="action_add_product">Добавить товар</string>
+    <string name="action_delete_product">Удалить товар</string>
+
+    <string name="error_page_title">Страница не загружается</string>
+    <string name="error_page_subtitle">Проверьте подключение\nк интернету или выключите VPN</string>
+    <string name="error_default">Ошибка загрузки</string>
+    <string name="error_add_product">Не удалось добавить товар</string>
+    <string name="error_delete_product">Не удалось удалить товар</string>
+    <string name="error_product_not_removable">Этот товар невозможно удалить</string>
+    <string name="error_server">Ошибка сервера: %1$d</string>
+
+    <string name="empty_product_list_title">Список товаров пуст</string>
+    <string name="empty_product_list_subtitle">Попробуйте обновить страницу</string>
+
+    <string name="success_product_added">Товар успешно добавлен</string>
+    <string name="success_product_deleted">Товар удален</string>
+
+    <string name="cache_outdated_notification">Данные устарели,\nобновите страницу</string>
+
+    <string name="balance_title">Баланс</string>
+    <string name="sales_title">Продажи</string>
+    <string name="sold">продано</string>
+    <string name="refunds_label">возврата</string>
+    <string name="income">выручка</string>
+    <string name="refund">ВОЗВРАТ</string>
+    <string name="pros_prefix">Достоинства: </string>
+    <string name="cons_prefix">Недостатки: </string>
 </resources>

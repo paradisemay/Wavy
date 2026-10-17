@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,7 +49,7 @@ fun ErrorStateScreen(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_back),
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.action_back),
                     tint = colorResource(R.color.main_text_color)
                 )
             }
@@ -62,7 +63,7 @@ fun ErrorStateScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Страница не загружается",
+                text = stringResource(R.string.error_page_title),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = colorResource(R.color.main_text_color),
@@ -72,7 +73,7 @@ fun ErrorStateScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Проверьте подключение\nк интернету или выключите VPN",
+                text = stringResource(R.string.error_page_subtitle),
                 fontSize = 14.sp,
                 color = colorResource(R.color.sub_text_color),
                 textAlign = TextAlign.Center,
@@ -91,7 +92,7 @@ fun ErrorStateScreen(
                 modifier = Modifier.width(180.dp)
             ) {
                 Text(
-                    text = "Обновить",
+                    text = stringResource(R.string.action_refresh),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
