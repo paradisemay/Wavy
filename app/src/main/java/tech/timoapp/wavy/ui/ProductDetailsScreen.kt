@@ -28,10 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.timoapp.wavy.R
-import tech.timoapp.wavy.model.ProductDetailsModel
+import tech.timoapp.wavy.model.ProductDetailsState
 
 @Composable
-fun TitleAndPriceContent(product: ProductDetailsModel) {
+fun TitleAndPriceContent(product: ProductDetailsState) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()
     ) {
@@ -48,7 +48,7 @@ fun TitleAndPriceContent(product: ProductDetailsModel) {
 }
 
 @Composable
-fun StatisticContent(product: ProductDetailsModel) {
+fun StatisticContent(product: ProductDetailsState) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -78,7 +78,7 @@ fun StatisticContent(product: ProductDetailsModel) {
 }
 
 @Composable
-fun ImageContent(product: ProductDetailsModel) {
+fun ImageContent(product: ProductDetailsState) {
     Box(
         contentAlignment = Alignment.BottomStart,
     ) {
@@ -88,7 +88,7 @@ fun ImageContent(product: ProductDetailsModel) {
 }
 
 @Composable
-fun ContentBadge(product: ProductDetailsModel) {
+fun ContentBadge(product: ProductDetailsState) {
     Badge(
         modifier = Modifier.padding(10.dp)
     ) {
@@ -97,7 +97,7 @@ fun ContentBadge(product: ProductDetailsModel) {
 }
 
 @Composable
-fun ProductDescription(product: ProductDetailsModel) {
+fun ProductDescription(product: ProductDetailsState) {
     DescriptionContent { isExpanded ->
         MainText(
             text = product.description,
@@ -108,7 +108,7 @@ fun ProductDescription(product: ProductDetailsModel) {
 
 @Composable
 fun DetailsPageScreen(
-    product: ProductDetailsModel, onBackClick: () -> Unit
+    product: ProductDetailsState, onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -233,7 +233,7 @@ fun DetailsPageSkeleton(onBackClick: () -> Unit) {
     }
 }
 
-val mockProduct = ProductDetailsModel(
+val mockProduct = ProductDetailsState(
     imageUrl = "",
     category = "Одежда",
     price = "1 104 ₽",

@@ -1,11 +1,10 @@
 package tech.timoapp.wavy.model
 
-import tech.timoapp.wavy.R
 import tech.timoapp.wavy.network.dto.ProductDetailsDto
 import tech.timoapp.wavy.util.formatPrice
 import tech.timoapp.wavy.util.formatRating
 
-data class ProductDetailsModel(
+data class ProductDetailsState(
     val imageUrl: String,
     val category: String,
     val price: String,
@@ -17,8 +16,8 @@ data class ProductDetailsModel(
     val description: String
 )
 
-fun ProductDetailsDto.toDetailsModel(): ProductDetailsModel {
-    return ProductDetailsModel(
+fun ProductDetailsDto.toDetailsModel(): ProductDetailsState {
+    return ProductDetailsState(
         imageUrl = if (this.imageUrl.startsWith("http")) this.imageUrl else "https://${this.imageUrl}",
         category = this.category,
         price = this.price.formatPrice(),

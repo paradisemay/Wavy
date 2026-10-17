@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import tech.timoapp.wavy.model.ProductDetailsModel
+import tech.timoapp.wavy.model.ProductDetailsState
 import tech.timoapp.wavy.model.toDetailsModel
 import tech.timoapp.wavy.network.RetrofitClient
 import tech.timoapp.wavy.ui.DetailsPageScreen
@@ -17,7 +17,7 @@ import tech.timoapp.wavy.util.safeApiCall
 
 class ProductDetailsFragment : Fragment() {
 
-    private val productState = mutableStateOf<ProductDetailsModel?>(null)
+    private val productState = mutableStateOf<ProductDetailsState?>(null)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

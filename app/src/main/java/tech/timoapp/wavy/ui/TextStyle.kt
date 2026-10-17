@@ -74,7 +74,25 @@ fun MetricBadgeText(
     )
 }
 
-// 14 400
+
+// 14 500
+@Composable
+fun ReviewStarsText(
+    text: String,
+    color: Color = colorResource(R.color.main_text_color),
+    modifier: Modifier? = null,
+    maxLines: Int? = 1
+) {
+    BaseText(
+        text,
+        color = color,
+        fontSize = 14.sp,
+        maxLines = maxLines,
+        modifier = modifier
+    )
+}
+
+// 45 400
 @Composable
 fun HugeText(
     text: String,

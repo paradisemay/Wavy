@@ -1,5 +1,6 @@
 package tech.timoapp.wavy.model
 
+import android.util.Log
 import tech.timoapp.wavy.network.dto.BalanceInfoDto
 import tech.timoapp.wavy.network.dto.SalesPointDto
 import tech.timoapp.wavy.util.formatPrice
@@ -33,7 +34,7 @@ fun BalanceInfoDto.toBalanceModel(): BalanceModel {
     val maxAmount = salesChart.data.maxOfOrNull { it.amount }?.takeIf { it > 0.0 } ?: 1.0
 
     val bars = salesChart.data.mapIndexed { index, point ->
-        val month = parseMonthName(point.period)
+        val month = point.period
         val amount = point.amount.formatPrice()
         val fraction = (point.amount / maxAmount).toFloat().coerceIn(0.1f, 1.0f)
         val isLast = index == salesChart.data.lastIndex
@@ -90,19 +91,4 @@ private fun formatGrow(value: Double, isPercent: Boolean, arrow: Boolean): Strin
         absValue.toInt().toString()
     }
     return "$sign$formatted"
-}
-
-private fun parseMonthName(period: String): String {
-    val monthMap = mapOf(
-        "01" to "Январь", "02" to "Февраль", "03" to "Март",
-        "04" to "Апрель", "05" to "Май", "06" to "Июнь",
-        "07" to "Июль", "08" to "Август", "09" to "Сентябрь",
-        "10" to "Октябрь", "11" to "Ноябрь", "12" to "Декабрь"
-    )
-    val parts = period.split("-")
-    if (parts.size >= 2) {
-        val monthCode = parts[1]
-        return monthMap[monthCode] ?: "Месяц"
-    }
-    return "Месяц"
 }
