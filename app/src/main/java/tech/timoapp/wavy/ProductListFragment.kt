@@ -10,14 +10,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import tech.timoapp.wavy.adapter.ProductAdapter
+import tech.timoapp.wavy.adapter.ProductLoadStateAdapter
 import tech.timoapp.wavy.databinding.FragmentProductListBinding
 import tech.timoapp.wavy.model.ProductListUiEvent
-import tech.timoapp.wavy.model.ProductListUiState
 import tech.timoapp.wavy.viewmodel.ProductListViewModel
 
 class ProductListFragment : Fragment() {
@@ -55,8 +57,21 @@ class ProductListFragment : Fragment() {
         ).apply {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
-        binding.rvProducts.adapter = myAdapter
-        binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        val footerAdapter = ProductLoadStateAdapter { myAdapter.retry() }
+        binding.rvProducts.adapter = myAdapter.withLoadStateFooter(footerAdapter)
+
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (position == myAdapter.itemCount && footerAdapter.itemCount > 0) {
+                    2
+                } else {
+                    1
+                }
+            }
+        }
+        binding.rvProducts.layoutManager = gridLayoutManager
         binding.rvProducts.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
 
         val skeletonCount = calculateSkeletonCount()
@@ -65,20 +80,96 @@ class ProductListFragment : Fragment() {
         binding.rvSkeleton.addItemDecoration(GridSpacingItemDecoration(2, 8, 10))
 
         binding.swipeRefreshLayout.setColorSchemeResources(R.color.dark_purple)
-        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.loadProducts() }
-        binding.btnRetry.setOnClickListener { viewModel.loadProducts() }
-        binding.btnEmptyRetry.setOnClickListener { viewModel.loadProducts() }
+        binding.swipeRefreshLayout.setOnRefreshListener { myAdapter.refresh() }
+        binding.btnRetry.setOnClickListener { myAdapter.retry() }
+        binding.btnEmptyRetry.setOnClickListener { myAdapter.refresh() }
         binding.fabAddProduct.setOnClickListener { viewModel.addProduct() }
 
-        observeUiState(myAdapter)
-        observeEvents()
+        observePagingData(myAdapter)
+        observeLoadState(myAdapter)
+        observeEvents(myAdapter)
     }
 
     fun scrollToTop() {
         binding.rvProducts.smoothScrollToPosition(0)
     }
 
-    private fun observeEvents() {
+    private fun observePagingData(adapter: ProductAdapter) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.productsPagingFlow.collectLatest { pagingData ->
+                    adapter.submitData(pagingData)
+                }
+            }
+        }
+    }
+
+    private fun observeLoadState(adapter: ProductAdapter) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adapter.loadStateFlow.collect { loadStates ->
+                    val refreshState = loadStates.refresh
+                    val isListEmpty = adapter.itemCount == 0
+
+                    when (refreshState) {
+                        is LoadState.Loading -> {
+                            if (!binding.swipeRefreshLayout.isRefreshing) {
+                                binding.shimmerLayout.isVisible = true
+                                binding.shimmerLayout.startShimmer()
+                                binding.rvProducts.isVisible = false
+                            }
+                            binding.layoutError.isVisible = false
+                            binding.layoutEmpty.isVisible = false
+                        }
+
+                        is LoadState.Error -> {
+                            binding.swipeRefreshLayout.isRefreshing = false
+                            binding.shimmerLayout.stopShimmer()
+                            binding.shimmerLayout.isVisible = false
+                            if (isListEmpty) {
+                                binding.layoutError.isVisible = true
+                                binding.rvProducts.isVisible = false
+                                binding.layoutEmpty.isVisible = false
+                            } else {
+                                binding.layoutError.isVisible = false
+                                binding.rvProducts.isVisible = true
+                                android.widget.Toast.makeText(
+                                    requireContext(),
+                                    refreshState.error.localizedMessage ?: getString(R.string.error_default),
+                                    android.widget.Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        is LoadState.NotLoading -> {
+                            binding.swipeRefreshLayout.isRefreshing = false
+                            binding.shimmerLayout.stopShimmer()
+                            binding.shimmerLayout.isVisible = false
+                            binding.layoutError.isVisible = false
+                            if (isListEmpty) {
+                                binding.rvProducts.isVisible = false
+                                binding.layoutEmpty.isVisible = true
+                            } else {
+                                binding.layoutEmpty.isVisible = false
+                                binding.rvProducts.isVisible = true
+                            }
+                        }
+                    }
+
+                    val appendState = loadStates.append
+                    if (appendState is LoadState.Error) {
+                        android.widget.Toast.makeText(
+                            requireContext(),
+                            appendState.error.localizedMessage ?: getString(R.string.error_default),
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeEvents(adapter: ProductAdapter) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.eventFlow.collect { event ->
@@ -89,15 +180,19 @@ class ProductListFragment : Fragment() {
                                 R.string.success_product_added,
                                 android.widget.Toast.LENGTH_SHORT
                             ).show()
+                            adapter.refresh()
                             binding.rvProducts.smoothScrollToPosition(0)
                         }
+
                         is ProductListUiEvent.ProductDeleted -> {
                             android.widget.Toast.makeText(
                                 requireContext(),
                                 R.string.success_product_deleted,
                                 android.widget.Toast.LENGTH_SHORT
                             ).show()
+                            adapter.refresh()
                         }
+
                         is ProductListUiEvent.Error -> {
                             val message = event.messageRes?.let { getString(it) }
                                 ?: event.message
@@ -107,54 +202,6 @@ class ProductListFragment : Fragment() {
                                 message,
                                 android.widget.Toast.LENGTH_SHORT
                             ).show()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeUiState(adapter: ProductAdapter) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    when (state) {
-                        is ProductListUiState.Loading -> {
-                            if (!binding.swipeRefreshLayout.isRefreshing) {
-                                binding.shimmerLayout.isVisible = true
-                                binding.shimmerLayout.startShimmer()
-                                binding.rvProducts.isVisible = false
-                            }
-                            binding.layoutError.isVisible = false
-                            binding.layoutEmpty.isVisible = false
-                        }
-
-                        is ProductListUiState.Success -> {
-                            binding.swipeRefreshLayout.isRefreshing = false
-                            binding.shimmerLayout.stopShimmer()
-                            binding.shimmerLayout.isVisible = false
-                            binding.layoutError.isVisible = false
-                            binding.layoutEmpty.isVisible = false
-                            binding.rvProducts.isVisible = true
-                            adapter.submitList(state.products)
-                        }
-
-                        is ProductListUiState.Empty -> {
-                            binding.swipeRefreshLayout.isRefreshing = false
-                            binding.shimmerLayout.stopShimmer()
-                            binding.shimmerLayout.isVisible = false
-                            binding.layoutError.isVisible = false
-                            binding.rvProducts.isVisible = false
-                            binding.layoutEmpty.isVisible = true
-                        }
-
-                        is ProductListUiState.Error -> {
-                            binding.swipeRefreshLayout.isRefreshing = false
-                            binding.shimmerLayout.stopShimmer()
-                            binding.shimmerLayout.isVisible = false
-                            binding.layoutEmpty.isVisible = false
-                            binding.rvProducts.isVisible = false
-                            binding.layoutError.isVisible = true
                         }
                     }
                 }

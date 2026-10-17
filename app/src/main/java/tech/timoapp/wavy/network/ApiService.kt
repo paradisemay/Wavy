@@ -14,7 +14,7 @@ import tech.timoapp.wavy.network.dto.ProductsResponseDto
 
 interface ApiService {
     @GET("api/products")
-    suspend fun getProducts(): Response<ProductsResponseDto>
+    suspend fun getProducts(@Query("page") page: Int? = null): Response<ProductsResponseDto>
 
     @POST("api/products/generate")
     suspend fun generateProduct(): Response<ProductDto>

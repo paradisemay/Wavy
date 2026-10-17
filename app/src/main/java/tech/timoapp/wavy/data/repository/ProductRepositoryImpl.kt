@@ -1,7 +1,16 @@
 package tech.timoapp.wavy.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import tech.timoapp.wavy.data.paging.ProductPagingSource
+import tech.timoapp.wavy.domain.model.Product
 import tech.timoapp.wavy.domain.model.ProductNotRemovableException
 import tech.timoapp.wavy.domain.model.ServerException
+import tech.timoapp.wavy.domain.model.toProduct
 import tech.timoapp.wavy.network.ApiService
 import tech.timoapp.wavy.network.dto.ProductDetailsDto
 import tech.timoapp.wavy.network.dto.ProductDto
@@ -9,6 +18,19 @@ import tech.timoapp.wavy.network.dto.ProductDto
 class ProductRepositoryImpl(
     private val apiService: ApiService
 ) : ProductRepository {
+
+    override fun getProductsPaged(): Flow<PagingData<Product>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false,
+                prefetchDistance = 2
+            ),
+            pagingSourceFactory = { ProductPagingSource(apiService) }
+        ).flow.map { pagingData ->
+            pagingData.map { it.toProduct() }
+        }
+    }
 
     override suspend fun getProducts(): Result<List<ProductDto>> {
         return try {

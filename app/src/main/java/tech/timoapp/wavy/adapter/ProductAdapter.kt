@@ -3,8 +3,8 @@ package tech.timoapp.wavy.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import tech.timoapp.wavy.R
@@ -14,7 +14,7 @@ import tech.timoapp.wavy.domain.model.Product
 class ProductAdapter(
     private val onItemClicked: (String) -> Unit,
     private val onDeleteClicked: (String) -> Unit
-) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
+) : PagingDataAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
@@ -26,14 +26,14 @@ class ProductAdapter(
         binding.root.setOnClickListener {
             val position = holder.bindingAdapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                onItemClicked(getItem(position).id)
+                getItem(position)?.let { onItemClicked(it.id) }
             }
         }
         binding.ivDelete.setOnClickListener {
             val position = holder.bindingAdapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val item = getItem(position)
-                if (item.isRemovable) {
+                if (item != null && item.isRemovable) {
                     onDeleteClicked(item.id)
                 }
             }
@@ -45,7 +45,9 @@ class ProductAdapter(
         holder: ProductViewHolder, position: Int
     ) {
         val currentProduct = getItem(position)
-        holder.bind(currentProduct)
+        if (currentProduct != null) {
+            holder.bind(currentProduct)
+        }
     }
 
     class ProductViewHolder(private val binding: ItemProductBinding) :
