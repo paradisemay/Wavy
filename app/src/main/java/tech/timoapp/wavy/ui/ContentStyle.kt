@@ -153,7 +153,13 @@ fun DescriptionContentPreview() {
 
 
 @Composable
-fun Modifier.shimmerEffect(): Modifier {
+fun Modifier.shimmerEffect(
+    shimmerColors: List<Color> = listOf(
+        Color(0xFFE6E0E9),
+        Color(0xFFF5F0F7),
+        Color(0xFFE6E0E9)
+    )
+): Modifier {
     val transition = rememberInfiniteTransition(label = "shimmer")
     val translateAnim by transition.animateFloat(
         initialValue = 0f,
@@ -165,12 +171,6 @@ fun Modifier.shimmerEffect(): Modifier {
         label = "shimmer_anim"
     )
 
-    val shimmerColors = listOf(
-        Color(0xFFE6E0E9),
-        Color(0xFFF5F0F7),
-        Color(0xFFE6E0E9)
-    )
-
     return this.background(
         brush = Brush.linearGradient(
             colors = shimmerColors,
@@ -179,3 +179,21 @@ fun Modifier.shimmerEffect(): Modifier {
         )
     )
 }
+
+@Composable
+fun Modifier.purpleShimmerEffect(): Modifier = shimmerEffect(
+    shimmerColors = listOf(
+        Color(0xFFEADDFF),
+        Color(0xFFF6EEFF),
+        Color(0xFFEADDFF)
+    )
+)
+
+@Composable
+fun Modifier.softPurpleShimmerEffect(): Modifier = shimmerEffect(
+    shimmerColors = listOf(
+        Color(0xFFF3EDF7),
+        Color(0xFFFCF9FC),
+        Color(0xFFF3EDF7)
+    )
+)

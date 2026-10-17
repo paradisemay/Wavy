@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -449,26 +452,36 @@ fun CacheNotificationBanner(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = colorResource(R.color.light_purple).copy(alpha = 0.5f),
-                shape = RoundedCornerShape(8.dp)
+                color = Color(0xFFAF94E8),
+                shape = RoundedCornerShape(16.dp)
             )
-            .clickable(onClick = onClick)
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Данные получены из кеша. Нажмите для обновления",
-            fontSize = 12.sp,
-            color = colorResource(R.color.dark_purple),
+            text = "Данные устарели,\nобновите страницу",
+            fontSize = 14.sp,
+            lineHeight = 18.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.White,
             modifier = Modifier.weight(1f)
         )
-        Text(
-            text = "↻",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.dark_purple)
-        )
+        Button(
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = colorResource(R.color.dark_purple)
+            ),
+            shape = RoundedCornerShape(20.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 6.dp)
+        ) {
+            Text(
+                text = "Обновить",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }
 

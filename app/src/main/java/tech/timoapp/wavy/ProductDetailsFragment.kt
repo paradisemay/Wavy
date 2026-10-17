@@ -31,7 +31,16 @@ class ProductDetailsFragment : Fragment() {
                             product = currentState.product,
                             onBackClick = { findNavController().popBackStack() })
                     }
-                    else -> {
+                    is ProductDetailsUiState.Error -> {
+                        tech.timoapp.wavy.ui.ErrorStateScreen(
+                            onRetry = {
+                                val productId = arguments?.getString("PRODUCT_ID") ?: return@ErrorStateScreen
+                                viewModel.loadProduct(productId)
+                            },
+                            onBackClick = { findNavController().popBackStack() }
+                        )
+                    }
+                    is ProductDetailsUiState.Loading -> {
                         DetailsPageSkeleton(
                             onBackClick = { findNavController().popBackStack() })
                     }
