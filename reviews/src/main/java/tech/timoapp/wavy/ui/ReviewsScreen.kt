@@ -43,6 +43,7 @@ import tech.timoapp.wavy.model.BalanceModel
 import tech.timoapp.wavy.model.FeedbackModel
 import tech.timoapp.wavy.model.ProductFeedbacksModel
 import tech.timoapp.wavy.model.ReviewsUiState
+import tech.timoapp.wavy.analytics.LocalAnalyticsTracker
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,8 +53,15 @@ fun ReviewsRoute(
     scrollToTopTrigger: Int = 0
 ) {
     val state = viewModel.uiState.value
+    val analyticsTracker = LocalAnalyticsTracker.current
     val isRefreshing = state is ReviewsUiState.Loading
     val pullToRefreshState = rememberPullToRefreshState()
+
+    LaunchedEffect(state) {
+        if (state is ReviewsUiState.Success) {
+            analyticsTracker.logReviewsScreenShow()
+        }
+    }
 
     PullToRefreshBox(
         isRefreshing = isRefreshing,
