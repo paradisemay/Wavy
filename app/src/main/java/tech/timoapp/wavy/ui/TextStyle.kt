@@ -31,6 +31,85 @@ fun BaseText(
     )
 }
 
+// 16 600
+@Composable
+fun MetricTitleText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
+    BaseText(
+        text,
+        colorResource(R.color.main_text_color),
+        16.sp,
+        fontWeight = FontWeight(600),
+        maxLines = maxLines,
+        modifier = modifier
+    )
+}
+
+// 12 500
+@Composable
+fun MetricMainText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
+    BaseText(
+        text,
+        colorResource(R.color.main_text_color),
+        12.sp,
+        maxLines = maxLines,
+        modifier = modifier
+    )
+}
+
+// 14 400
+@Composable
+fun MetricBadgeText(
+    text: String,
+    color: Color = colorResource(R.color.main_text_color),
+    modifier: Modifier? = null,
+    maxLines: Int? = 1
+) {
+    BaseText(
+        text,
+        color = color,
+        fontSize = 14.sp,
+        fontWeight = FontWeight(400),
+        maxLines = maxLines,
+        modifier = modifier
+    )
+}
+
+// 14 400
+@Composable
+fun HugeText(
+    text: String,
+    color: Color = colorResource(R.color.main_text_color),
+    modifier: Modifier? = null,
+    maxLines: Int? = 1
+) {
+    BaseText(
+        text,
+        color = color,
+        fontSize = 45.sp,
+        maxLines = maxLines,
+        modifier = modifier
+    )
+}
+
+
+// 11 500 white
+@Composable
+fun ChartText(
+    text: String,
+    color: Color = colorResource(R.color.main_text_color),
+    modifier: Modifier? = null,
+    maxLines: Int? = 1
+) {
+    BaseText(
+        text,
+        color = color,
+        fontSize = 11.sp,
+        maxLines = maxLines,
+        modifier = modifier
+    )
+}
+
+// 24 500
 @Composable
 fun TitleText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -42,6 +121,7 @@ fun TitleText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     )
 }
 
+// 22 500
 @Composable
 fun LargeText(text: String, modifier: Modifier? = null, maxLines: Int? = 2) {
     BaseText(
@@ -53,6 +133,7 @@ fun LargeText(text: String, modifier: Modifier? = null, maxLines: Int? = 2) {
     )
 }
 
+// 16 400
 @Composable
 fun MainText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     BaseText(
@@ -65,6 +146,7 @@ fun MainText(text: String, modifier: Modifier? = null, maxLines: Int? = null) {
     )
 }
 
+// 16 500
 @Composable
 fun MainStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -76,6 +158,20 @@ fun MainStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? =
     )
 }
 
+// 16 600
+@Composable
+fun MainBoldStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
+    BaseText(
+        text,
+        colorResource(R.color.main_text_color),
+        16.sp,
+        fontWeight = FontWeight(600),
+        maxLines = maxLines,
+        modifier = modifier
+    )
+}
+
+// 26 500
 @Composable
 fun LargeStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
@@ -87,6 +183,7 @@ fun LargeStatisticText(text: String, modifier: Modifier? = null, maxLines: Int? 
     )
 }
 
+// 24 500 sub
 @Composable
 fun TitleSubText(text: String, modifier: Modifier? = null, maxLines: Int? = 1) {
     BaseText(
